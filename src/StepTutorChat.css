@@ -1,0 +1,215 @@
+.tutor-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(27, 36, 32, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  z-index: 100;
+  animation: tutor-overlay-in 0.2s ease both;
+}
+
+@keyframes tutor-overlay-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.tutor-modal {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  box-shadow: var(--shadow);
+  width: 100%;
+  max-width: 520px;
+  max-height: 82vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  animation: tutor-modal-in 0.25s cubic-bezier(0.2, 0.8, 0.3, 1) both;
+}
+
+@keyframes tutor-modal-in {
+  from { opacity: 0; transform: translateY(12px) scale(0.98); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.tutor-modal-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding: 16px 18px 12px;
+  border-bottom: 1px solid var(--line);
+  background: var(--paper-raised);
+}
+
+.tutor-modal-eyebrow {
+  display: block;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--accent2);
+  margin-bottom: 3px;
+}
+
+.tutor-modal-head h4 {
+  font-size: 16px;
+  font-weight: 600;
+  margin: 0;
+}
+
+.tutor-close {
+  background: none;
+  border: none;
+  font-size: 15px;
+  color: var(--ink-soft);
+  cursor: pointer;
+  padding: 2px 6px;
+  flex: none;
+}
+
+.tutor-close:hover {
+  color: var(--ink);
+}
+
+.tutor-chat-log {
+  flex: 1;
+  overflow-y: auto;
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-height: 200px;
+}
+
+.tutor-msg {
+  max-width: 90%;
+  animation: tutor-msg-in 0.25s ease both;
+}
+
+@keyframes tutor-msg-in {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.tutor-msg.ai {
+  align-self: flex-start;
+}
+
+.tutor-msg.user {
+  align-self: flex-end;
+}
+
+.tutor-msg-label {
+  display: block;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 9.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--ink-soft);
+  margin-bottom: 3px;
+}
+
+.tutor-msg.user .tutor-msg-label {
+  text-align: right;
+}
+
+.tutor-msg p {
+  margin: 0;
+  padding: 9px 12px;
+  border-radius: 10px;
+  font-size: 13.5px;
+  line-height: 1.55;
+  white-space: pre-wrap;
+}
+
+.tutor-msg.ai p {
+  background: var(--paper-raised);
+  color: var(--ink);
+  border-bottom-left-radius: 3px;
+}
+
+.tutor-msg.user p {
+  background: var(--accent2-tint);
+  color: var(--ink);
+  border-bottom-right-radius: 3px;
+}
+
+.tutor-status {
+  font-size: 12px;
+  color: var(--ink-soft);
+  font-style: italic;
+  margin: 0;
+}
+
+.tutor-status.error {
+  color: var(--danger);
+  font-style: normal;
+}
+
+.tutor-quick-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 10px 14px 0;
+}
+
+.tutor-quick-actions button {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 100px;
+  padding: 6px 12px;
+  font-size: 11.5px;
+  font-weight: 500;
+  color: var(--ink-soft);
+  cursor: pointer;
+}
+
+.tutor-quick-actions button:hover:not(:disabled) {
+  border-color: var(--accent2);
+  color: var(--accent2);
+}
+
+.tutor-quick-actions button:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+.tutor-chat-input {
+  display: flex;
+  gap: 8px;
+  padding: 12px 14px;
+  border-top: 1px solid var(--line);
+  background: var(--paper-raised);
+}
+
+.tutor-chat-input input {
+  flex: 1;
+  min-width: 0;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 9px 11px;
+  font-size: 13px;
+  color: var(--ink);
+}
+
+.tutor-chat-input .btn {
+  padding: 9px 18px;
+  font-size: 13px;
+}
+
+@media (max-width: 560px) {
+  .tutor-modal {
+    max-height: 88vh;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tutor-modal-overlay,
+  .tutor-modal,
+  .tutor-msg {
+    animation: none;
+  }
+}

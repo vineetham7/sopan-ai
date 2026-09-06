@@ -1,0 +1,140 @@
+:root {
+  --paper: #f3f4ee;
+  --paper-raised: #ebece3;
+  --ink: #1b2420;
+  --ink-soft: #4d564f;
+  --line: #d9d5c6;
+  --accent: #a06a1f;
+  --accent-ink: #6e4914;
+  --accent-tint: #efe3cd;
+  --accent2: #1e6b5c;
+  --accent2-tint: #dfeae5;
+  --danger: #9a3324;
+  --danger-tint: #f5e2dc;
+  --code-bg: #1b2420;
+  --code-ink: #eef1e8;
+  --code-line: #34413a;
+  --shadow: 0 1px 2px rgba(27, 36, 32, 0.06), 0 8px 24px -12px rgba(27, 36, 32, 0.18);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #141b18;
+    --paper-raised: #1a2320;
+    --ink: #eef1e8;
+    --ink-soft: #a8b3aa;
+    --line: #2c362f;
+    --accent: #d9a44f;
+    --accent-ink: #f0c579;
+    --accent-tint: #2c2413;
+    --accent2: #4bab97;
+    --accent2-tint: #172b26;
+    --danger: #e0806c;
+    --danger-tint: #2e1c17;
+    --code-bg: #0e1512;
+    --code-ink: #e7ebe1;
+    --code-line: #2c362f;
+    --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 24px -12px rgba(0, 0, 0, 0.5);
+  }
+}
+
+:root[data-theme="dark"] {
+  --paper: #141b18;
+  --paper-raised: #1a2320;
+  --ink: #eef1e8;
+  --ink-soft: #a8b3aa;
+  --line: #2c362f;
+  --accent: #d9a44f;
+  --accent-ink: #f0c579;
+  --accent-tint: #2c2413;
+  --accent2: #4bab97;
+  --accent2-tint: #172b26;
+  --danger: #e0806c;
+  --danger-tint: #2e1c17;
+  --code-bg: #0e1512;
+  --code-ink: #e7ebe1;
+  --code-line: #2c362f;
+  --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 24px -12px rgba(0, 0, 0, 0.5);
+}
+
+/* Colorblind-safe mode — swaps the mastered/error signal colors to the
+   Okabe-Ito blue/orange pair, distinguishable across all common forms of
+   color vision deficiency. Overrides both themes equally since these two
+   mid-tone colors read fine on both light and dark backgrounds. */
+:root[data-colorblind="true"] {
+  --accent2: #0072b2;
+  --accent2-tint: #d6e8f5;
+  --danger: #e69f00;
+  --danger-tint: #f9ead1;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"])[data-colorblind="true"] {
+    --accent2-tint: #12283a;
+    --danger-tint: #3a2c0c;
+  }
+}
+:root[data-theme="dark"][data-colorblind="true"] {
+  --accent2-tint: #12283a;
+  --danger-tint: #3a2c0c;
+}
+
+@font-face {
+  font-family: "OpenDyslexic";
+  src: url("https://cdn.jsdelivr.net/gh/antijingoist/opendyslexic@master/compiled/OpenDyslexic-Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-display: swap;
+}
+@font-face {
+  font-family: "OpenDyslexic";
+  src: url("https://cdn.jsdelivr.net/gh/antijingoist/opendyslexic@master/compiled/OpenDyslexic-Bold.woff2") format("woff2");
+  font-weight: 600 700;
+  font-display: swap;
+}
+
+[data-dyslexia="true"] body,
+[data-dyslexia="true"] {
+  font-family: "OpenDyslexic", "Public Sans", sans-serif !important;
+  letter-spacing: 0.02em;
+  line-height: 1.7;
+}
+[data-dyslexia="true"] h1,
+[data-dyslexia="true"] h2,
+[data-dyslexia="true"] h3 {
+  font-family: "OpenDyslexic", "Fraunces", serif !important;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  color-scheme: light dark;
+}
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: "Public Sans", -apple-system, "Segoe UI", sans-serif;
+  font-size: 16px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3 {
+  font-family: "Fraunces", Georgia, serif;
+  text-wrap: balance;
+  margin: 0;
+}
+
+code, .mono {
+  font-family: "IBM Plex Mono", ui-monospace, Menlo, monospace;
+}
+
+button {
+  font-family: inherit;
+}
+
+#root {
+  min-height: 100svh;
+}

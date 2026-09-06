@@ -1,0 +1,126 @@
+.skill-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.skill-node {
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid var(--line);
+  background: var(--paper);
+  font-size: 14px;
+}
+
+.skill-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.skill-icon {
+  width: 22px;
+  text-align: center;
+  font-size: 13px;
+}
+
+.skill-title {
+  flex: 1;
+}
+
+.due-badge {
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  background: var(--danger-tint);
+  color: var(--danger);
+  padding: 3px 8px;
+  border-radius: 100px;
+  flex: none;
+}
+
+.skill-node.locked {
+  color: var(--ink-soft);
+  opacity: 0.7;
+}
+
+.skill-node.unlocked {
+  border-color: var(--accent);
+  background: var(--accent-tint);
+}
+
+.skill-node.unlocked .skill-icon {
+  color: var(--accent-ink);
+}
+
+.skill-node.mastered {
+  border-color: var(--accent2);
+  background: var(--accent2-tint);
+}
+
+.skill-node.mastered .skill-icon {
+  color: var(--accent2);
+}
+
+.self-assess {
+  display: flex;
+  gap: 6px;
+  margin-top: 8px;
+  flex-wrap: wrap;
+}
+
+.self-assess .chip {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 100px;
+  padding: 4px 10px;
+  font-size: 11px;
+  color: var(--ink-soft);
+  cursor: pointer;
+}
+
+.self-assess .chip.active-confident {
+  background: var(--accent2-tint);
+  border-color: var(--accent2);
+  color: var(--accent2);
+  font-weight: 600;
+}
+
+.self-assess .chip.active-shaky {
+  background: var(--accent-tint);
+  border-color: var(--accent);
+  color: var(--accent-ink);
+  font-weight: 600;
+}
+
+.self-assess .chip.active-revision {
+  background: var(--danger-tint);
+  border-color: var(--danger);
+  color: var(--danger);
+  font-weight: 600;
+}
+
+.deep-check-btn {
+  display: block;
+  width: 100%;
+  background: none;
+  border: none;
+  border-top: 1px dashed var(--line);
+  margin-top: 10px;
+  padding-top: 8px;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--accent-ink);
+  cursor: pointer;
+  text-align: left;
+}
+
+.deep-check-wrap {
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px dashed var(--line);
+}

@@ -1,0 +1,299 @@
+.learn-feed .state-msg {
+  color: var(--ink-soft);
+  font-size: 14px;
+}
+
+.learn-feed .error {
+  color: var(--danger);
+}
+
+.feed-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 4px;
+}
+
+.published {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 11px;
+  color: var(--ink-soft);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.badge {
+  font-size: 10.5px;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 100px;
+}
+
+.badge.update {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  color: var(--ink-soft);
+}
+
+.badge.breakthrough {
+  background: var(--danger-tint);
+  color: var(--danger);
+}
+
+.source-badge {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 10.5px;
+  color: var(--ink-soft);
+}
+
+.hn-stats {
+  font-size: 12px;
+  color: var(--ink-soft);
+  margin: -4px 0 10px;
+}
+
+/* Filter tabs — All / Research / Industry news */
+.feed-filters {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 12px;
+}
+
+.feed-filters button {
+  background: var(--paper-raised);
+  border: 1px solid var(--line);
+  border-radius: 100px;
+  padding: 6px 14px;
+  font-size: 12.5px;
+  font-weight: 500;
+  color: var(--ink-soft);
+  cursor: pointer;
+}
+
+.feed-filters button.active {
+  background: var(--accent-tint);
+  border-color: var(--accent);
+  color: var(--accent-ink);
+  font-weight: 600;
+}
+
+/* Explore more sources — static, honest outbound links */
+.explore-sources {
+  margin-top: 20px;
+  border-top: 1px solid var(--line);
+  padding-top: 14px;
+}
+
+.explore-toggle {
+  background: none;
+  border: none;
+  color: var(--ink-soft);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0;
+}
+
+.explore-toggle:hover {
+  color: var(--ink);
+}
+
+.explore-groups {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+  margin-top: 14px;
+}
+
+@media (min-width: 760px) {
+  .explore-groups {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.explore-group-title {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--ink-soft);
+  margin-bottom: 8px;
+}
+
+.explore-link {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  padding: 7px 0;
+  border-bottom: 1px dashed var(--line);
+  text-decoration: none;
+}
+
+.explore-link:last-child {
+  border-bottom: none;
+}
+
+.explore-link-name {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--accent-ink);
+}
+
+.explore-link-note {
+  font-size: 11.5px;
+  color: var(--ink-soft);
+}
+
+/* Kanban grid — card-based, click to open */
+.kanban-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+@media (min-width: 640px) {
+  .kanban-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 980px) {
+  .kanban-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.kanban-card {
+  text-align: left;
+  background: var(--paper-raised);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 14px;
+  cursor: pointer;
+  box-shadow: var(--shadow);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.kanban-title {
+  font-weight: 600;
+  font-size: 14.5px;
+  color: var(--ink);
+  line-height: 1.35;
+}
+
+.kanban-summary {
+  font-size: 13px;
+  color: var(--ink-soft);
+  margin: 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.kanban-open {
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--accent-ink);
+  margin-top: 2px;
+}
+
+.load-more {
+  margin-top: 4px;
+}
+
+/* Detail view — opened article */
+.insta-detail {
+  display: flex;
+  flex-direction: column;
+}
+
+.back-btn {
+  align-self: flex-start;
+  background: none;
+  border: none;
+  color: var(--ink-soft);
+  font-size: 12.5px;
+  cursor: pointer;
+  padding: 0;
+  margin-bottom: 10px;
+}
+
+.detail-title {
+  font-size: 17px;
+  font-weight: 600;
+  margin: 4px 0 8px;
+  line-height: 1.35;
+}
+
+.one-liner {
+  font-size: 14px;
+  margin-bottom: 8px;
+}
+
+.try-this,
+.real-world {
+  border-radius: 8px;
+  padding: 8px 10px;
+  font-size: 13px;
+  margin-bottom: 8px;
+}
+
+.try-this {
+  background: var(--accent2-tint);
+}
+
+.try-this .label {
+  font-weight: 600;
+  color: var(--accent2);
+  margin-right: 4px;
+}
+
+.real-world {
+  background: var(--accent-tint);
+}
+
+.real-world .label {
+  font-weight: 600;
+  color: var(--accent-ink);
+  margin-right: 4px;
+}
+
+.flashcard {
+  width: 100%;
+  text-align: left;
+  background: var(--paper);
+  border: 1px dashed var(--line);
+  border-radius: 8px;
+  padding: 10px 12px;
+  cursor: pointer;
+  margin-top: 4px;
+}
+
+.flashcard-label {
+  font-size: 10.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--ink-soft);
+  margin-bottom: 4px;
+}
+
+.flashcard-text {
+  font-size: 13.5px;
+  font-weight: 500;
+  color: var(--ink);
+}
+
+.read-original {
+  display: block;
+  font-size: 12px;
+  color: var(--accent-ink);
+  margin: 12px 0 4px;
+}
+
+.try-now {
+  margin-top: 12px;
+}

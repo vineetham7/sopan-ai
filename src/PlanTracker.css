@@ -1,0 +1,191 @@
+.plan-tracker.empty .state-msg {
+  color: var(--ink-soft);
+  font-size: 13px;
+}
+
+.plan-tracker {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.tracked-plan {
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--paper);
+  overflow: hidden;
+}
+
+.tracked-plan-head {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: none;
+  border: none;
+  padding: 12px 14px;
+  cursor: pointer;
+  font-size: 14px;
+  color: var(--ink);
+  text-align: left;
+}
+
+.tp-title {
+  font-weight: 600;
+}
+
+.tp-progress {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 12px;
+  color: var(--accent2);
+  flex: none;
+}
+
+.tracked-plan-body {
+  padding: 0 14px 14px;
+  border-top: 1px solid var(--line);
+}
+
+.tp-tabs {
+  display: flex;
+  gap: 14px;
+  margin: 12px 0 10px;
+  border-bottom: 1px solid var(--line);
+}
+
+.tp-tabs button {
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  padding: 7px 0;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--ink-soft);
+  cursor: pointer;
+}
+
+.tp-tabs button:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.tp-tabs button.active {
+  color: var(--accent2);
+  border-bottom-color: var(--accent2);
+}
+
+.tp-panel {
+  margin-bottom: 10px;
+}
+
+.tracked-plan-body .plan-steps {
+  list-style: none;
+  margin: 12px 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.tracked-plan-body .plan-step {
+  background: var(--paper-raised);
+  border: 1px solid transparent;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.tracked-plan-body .plan-step.open {
+  border-color: var(--accent2);
+}
+
+.tracked-plan-body .step-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 9px;
+  padding: 9px 10px;
+  cursor: pointer;
+}
+
+.tracked-plan-body .plan-step input[type="checkbox"] {
+  width: 15px;
+  height: 15px;
+  margin-top: 2px;
+  accent-color: var(--accent2);
+  flex: none;
+  cursor: pointer;
+}
+
+.tracked-plan-body .step-headline {
+  flex: 1;
+  min-width: 0;
+}
+
+.tracked-plan-body .step-title {
+  font-size: 12.5px;
+  font-weight: 600;
+  display: block;
+}
+
+.tracked-plan-body .step-desc {
+  font-size: 11.5px;
+  color: var(--ink-soft);
+  margin: 3px 0 0;
+}
+
+.tracked-plan-body .step-chevron {
+  font-size: 8px;
+  color: var(--ink-soft);
+  flex: none;
+  margin-top: 3px;
+}
+
+.tracked-plan-body .step-lesson {
+  padding: 0 12px 12px 34px;
+  animation: lesson-open 0.25s ease both;
+}
+
+.tracked-plan-body .step-lesson p {
+  font-size: 12.5px;
+  line-height: 1.55;
+  color: var(--ink);
+  margin: 0 0 6px;
+}
+
+.tracked-plan-body .step-source {
+  font-size: 10.5px;
+  color: var(--accent-ink);
+  word-break: break-all;
+}
+
+.tracked-plan-body .chat-tutor-btn {
+  display: block;
+  margin-top: 8px;
+  background: var(--accent2-tint);
+  border: 1px solid var(--accent2);
+  color: var(--accent2);
+  border-radius: 100px;
+  padding: 6px 13px;
+  font-size: 11.5px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+@keyframes lesson-open {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tracked-plan-body .step-lesson {
+    animation: none;
+  }
+}
+
+.remove-plan {
+  background: none;
+  border: none;
+  color: var(--danger);
+  font-size: 11.5px;
+  cursor: pointer;
+  padding: 0;
+}

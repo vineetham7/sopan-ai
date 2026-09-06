@@ -1,0 +1,353 @@
+/* Embedding bars — real values from the actual embedding vector */
+.embedding-bars {
+  display: flex;
+  align-items: flex-end;
+  gap: 2px;
+  height: 60px;
+  padding: 6px;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+}
+
+.embedding-bar {
+  flex: 1;
+  min-width: 3px;
+  background: var(--accent2);
+  border-radius: 2px 2px 0 0;
+  opacity: 0.85;
+  transition: height 0.3s ease;
+}
+
+/* Accuracy line chart — real epoch-by-epoch accuracy */
+.accuracy-chart {
+  width: 100%;
+  height: 90px;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+}
+
+.accuracy-chart.empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--ink-soft);
+  font-size: 12px;
+}
+
+.axis-line {
+  stroke: var(--line);
+  stroke-width: 1;
+}
+
+.accuracy-line {
+  stroke: var(--accent2);
+  stroke-width: 2;
+}
+
+.accuracy-dot {
+  fill: var(--accent2);
+}
+
+.accuracy-label {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 10px;
+  fill: var(--accent2);
+  font-weight: 600;
+}
+
+/* Network diagram — a real fully-connected graph with animated flow */
+.network-diagram-svg {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 8px 4px 4px;
+}
+
+.network-diagram-svg svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.net-edge {
+  stroke: var(--line);
+  stroke-width: 0.6;
+  opacity: 0.6;
+}
+
+.net-node {
+  fill: var(--line);
+}
+
+.network-diagram-svg.active .net-node.input {
+  fill: var(--accent2);
+  opacity: 0.7;
+}
+
+.network-diagram-svg.active .net-node.hidden {
+  fill: var(--accent2);
+  animation: net-pulse 1s ease-in-out infinite;
+}
+
+.network-diagram-svg.active .net-node.output {
+  fill: var(--accent);
+  animation: net-pulse 1.3s ease-in-out infinite;
+}
+
+.net-node-label {
+  font-size: 9px;
+  fill: var(--ink-soft);
+  dominant-baseline: middle;
+}
+
+.net-flow-dot {
+  fill: var(--accent2);
+  opacity: 0.85;
+}
+
+@keyframes net-pulse {
+  0%, 100% { opacity: 0.5; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.3); }
+}
+
+.net-layer-labels {
+  display: flex;
+  justify-content: space-between;
+  padding: 2px 6px 4px;
+}
+
+.net-layer-labels span {
+  font-size: 9.5px;
+  color: var(--ink-soft);
+  text-align: center;
+  flex: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .network-diagram-svg.active .net-node,
+  .net-flow-dot {
+    animation: none;
+    opacity: 0.9;
+  }
+}
+
+/* Pipeline flow overview — "you are here" strip above the math steps */
+.pipeline-flow-wrap {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 8px 6px 6px;
+  margin-bottom: 12px;
+}
+
+.pipeline-flow {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.flow-edge {
+  stroke: var(--line);
+  stroke-width: 1;
+}
+
+.flow-dot {
+  fill: var(--accent2);
+  opacity: 0.7;
+}
+
+.flow-node circle {
+  fill: var(--paper-raised);
+  stroke: var(--line);
+  stroke-width: 1.5;
+  transition: stroke 0.3s ease, fill 0.3s ease;
+}
+
+.flow-node.done circle {
+  stroke: var(--accent2);
+  fill: var(--accent2-tint);
+}
+
+.flow-node.active circle {
+  stroke: var(--accent);
+  fill: var(--accent-tint);
+  animation: net-pulse 1s ease-in-out infinite;
+}
+
+.flow-icon {
+  font-size: 13px;
+}
+
+.flow-labels {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 2px;
+}
+
+.flow-labels span {
+  font-size: 8.5px;
+  color: var(--ink-soft);
+  text-align: center;
+  flex: 1;
+}
+
+.flow-labels span.active {
+  color: var(--accent-ink);
+  font-weight: 700;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .flow-dot, .flow-node.active circle {
+    animation: none;
+  }
+}
+
+/* Confidence bars — real softmax output per class */
+.confidence-bars {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.confidence-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.confidence-name {
+  width: 64px;
+  flex: none;
+  font-size: 12px;
+  font-weight: 500;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.confidence-track {
+  flex: 1;
+  height: 8px;
+  background: var(--line);
+  border-radius: 100px;
+  overflow: hidden;
+}
+
+.confidence-fill {
+  height: 100%;
+  background: var(--ink-soft);
+  border-radius: 100px;
+  transition: width 0.4s ease;
+}
+
+.confidence-fill.winner {
+  background: var(--accent2);
+}
+
+.confidence-pct {
+  width: 36px;
+  flex: none;
+  text-align: right;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 11px;
+  color: var(--ink-soft);
+}
+
+/* Step-by-step real-math walkthrough for a single prediction */
+.pred-math {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.pred-step {
+  opacity: 0;
+  animation: pred-fade-in 0.5s ease forwards;
+}
+
+@keyframes pred-fade-in {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pred-step {
+    animation: none;
+    opacity: 1;
+  }
+}
+
+.pred-step-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--ink-soft);
+  margin-bottom: 6px;
+}
+
+.pred-formula {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 11px;
+  line-height: 1.7;
+  color: var(--ink);
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 8px 10px;
+  margin-bottom: 6px;
+  overflow-x: auto;
+  white-space: nowrap;
+}
+
+.pred-formula strong {
+  color: var(--accent2);
+}
+
+.logits-row {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.logit-chip {
+  flex: 1;
+  min-width: 100px;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 8px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.logit-name {
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.logit-val {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 11px;
+  color: var(--accent2);
+}
+
+.replay-btn {
+  background: none;
+  border: 1px solid var(--line);
+  border-radius: 100px;
+  padding: 6px 14px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--ink-soft);
+  cursor: pointer;
+  align-self: flex-start;
+  margin-top: 4px;
+}
+
+.replay-btn:hover {
+  color: var(--ink);
+  border-color: var(--accent2);
+}

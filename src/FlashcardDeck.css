@@ -1,0 +1,127 @@
+.flashcard-deck {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.deck-meta {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11.5px;
+  color: var(--ink-soft);
+}
+
+.deck-hint {
+  font-style: italic;
+}
+
+.flip-card {
+  perspective: 1200px;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  width: 100%;
+  height: 160px;
+  display: block;
+}
+
+.flip-card-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.5s cubic-bezier(0.4, 0.2, 0.2, 1);
+  transform-style: preserve-3d;
+}
+
+.flip-card.is-flipped .flip-card-inner {
+  transform: rotateY(180deg);
+}
+
+.flip-face {
+  position: absolute;
+  inset: 0;
+  backface-visibility: hidden;
+  border-radius: 12px;
+  border: 1px solid var(--line);
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  gap: 8px;
+}
+
+.flip-face p {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--ink);
+  line-height: 1.45;
+}
+
+.flip-front {
+  background: var(--paper-raised);
+}
+
+.flip-back {
+  background: var(--accent2-tint);
+  transform: rotateY(180deg);
+}
+
+.flip-label {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--ink-soft);
+}
+
+.flip-back .flip-label {
+  color: var(--accent2);
+}
+
+.deck-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.deck-nav-btn {
+  background: none;
+  border: 1px solid var(--line);
+  border-radius: 100px;
+  padding: 6px 14px;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--ink-soft);
+  cursor: pointer;
+}
+
+.deck-nav-btn:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.deck-dots {
+  display: flex;
+  gap: 5px;
+}
+
+.deck-dots .dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--line);
+}
+
+.deck-dots .dot.active {
+  background: var(--accent2);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .flip-card-inner {
+    transition: none;
+  }
+}

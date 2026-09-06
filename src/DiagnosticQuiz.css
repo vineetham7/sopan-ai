@@ -1,0 +1,118 @@
+.diagnostic .meta {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 12px;
+  color: var(--ink-soft);
+  margin-bottom: 10px;
+}
+
+.diagnostic .prompt {
+  font-size: 15.5px;
+  font-weight: 500;
+  margin-bottom: 12px;
+}
+
+.diagnostic .options {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.diagnostic .options button {
+  width: 100%;
+  text-align: left;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 10px 12px;
+  font-size: 14px;
+  color: var(--ink);
+  cursor: pointer;
+}
+
+.diagnostic .options button:disabled {
+  cursor: default;
+}
+
+.diagnostic .options button.correct {
+  border-color: var(--accent2);
+  background: var(--accent2-tint);
+  color: var(--accent2);
+  font-weight: 600;
+}
+
+.diagnostic .options button.incorrect {
+  border-color: var(--danger);
+  background: var(--danger-tint);
+  color: var(--danger);
+  font-weight: 600;
+}
+
+.diagnostic .feedback {
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid var(--line);
+}
+
+.diagnostic .feedback .verdict {
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.diagnostic .feedback .explanation {
+  color: var(--ink-soft);
+  font-size: 13.5px;
+  margin-bottom: 12px;
+}
+
+.diagnostic .done .verdict {
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.diagnostic .state-msg {
+  color: var(--ink-soft);
+  font-size: 14px;
+}
+
+.diagnostic .source-tag {
+  color: var(--accent-ink);
+}
+
+.topic-results {
+  list-style: none;
+  margin: 12px 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.topic-results li {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 10px;
+  border-radius: 8px;
+  font-size: 13px;
+  border: 1px solid var(--line);
+}
+
+.topic-results li.passed {
+  background: var(--accent2-tint);
+  border-color: var(--accent2);
+}
+
+.topic-results li.passed .tr-score {
+  color: var(--accent2);
+  font-weight: 600;
+}
+
+.topic-results li.not-passed {
+  background: var(--paper);
+}
+
+.topic-results .tr-score {
+  font-family: "IBM Plex Mono", monospace;
+}

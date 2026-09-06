@@ -1,0 +1,26 @@
+.code-block textarea {
+  width: 100%;
+  background: var(--code-bg);
+  color: var(--code-ink);
+  border: 1px solid var(--code-line);
+  border-radius: 8px;
+  padding: 12px;
+  font-family: "IBM Plex Mono", ui-monospace, Menlo, monospace;
+  font-size: 13px;
+  line-height: 1.55;
+  resize: vertical;
+  margin-bottom: 10px;
+}
+
+.code-block pre {
+  margin: 10px 0 0;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 10px 12px;
+  font-family: "IBM Plex Mono", ui-monospace, Menlo, monospace;
+  font-size: 13px;
+  min-height: 20px;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
