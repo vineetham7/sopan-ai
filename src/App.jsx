@@ -6,13 +6,23 @@ import { ensureSkillGraphSeeded } from './ensureSkillGraph'
 import Diagnostic from './DiagnosticQuiz'
 import PlanAssembly from './PlanAssembly'
 import CodeBlock from './CodeBlock'
+import BugHuntGame from './BugHuntGame'
 import SkillMap from './SkillMap'
 import PlanTracker from './PlanTracker'
 import LearnFeed from './LearnFeed'
 import MLSandbox from './MLSandbox'
 import { applyFullDiagnosticResult } from './applyFullDiagnosticResult'
 import { isDue } from './sm2'
+import WelcomeTour from './WelcomeTour'
 import './App.css'
+
+function shouldShowTour() {
+  try {
+    return !localStorage.getItem('sopan-tour-seen')
+  } catch {
+    return false
+  }
+}
 
 const TABS = [
   { id: 'diagnostic', label: 'Diagnostic' },
@@ -40,6 +50,7 @@ function App() {
   const [theme, setTheme] = useState(getInitialTheme)
   const [dyslexiaFont, setDyslexiaFont] = useState(() => getInitialFlag('sopan-dyslexia'))
   const [colorblind, setColorblind] = useState(() => getInitialFlag('sopan-colorblind'))
+  const [showTour, setShowTour] = useState(shouldShowTour)
 
   useEffect(() => {
     if (!user) return
@@ -82,6 +93,7 @@ function App() {
 
   return (
     <div className="app">
+      {showTour && <WelcomeTour onDone={() => setShowTour(false)} />}
       <header className="site-header">
         <div className="site-header-inner">
           <div className="brand-row">
@@ -214,6 +226,14 @@ function App() {
             </div>
             <div className="card">
               <CodeBlock starterCode={'print("hello from python")\n1 + 1'} />
+            </div>
+
+            <div className="panel-head" style={{ marginTop: 24 }}>
+              <h2>Spot the bug</h2>
+              <p>Five real, common Python bugs. Fix the code, then run it — a real interpreter checks whether your fix actually works.</p>
+            </div>
+            <div className="card">
+              <BugHuntGame />
             </div>
           </section>
         )}

@@ -22,13 +22,15 @@ export default function PlanAssembly({ uid }) {
   const [error, setError] = useState(null);
   const [saveStatus, setSaveStatus] = useState("idle"); // idle | saving | saved
   const [section, setSection] = useState("steps"); // steps | flashcards | quiz
+  const [lastTopicId, setLastTopicId] = useState(null);
 
-  async function run(topicGoal) {
+  async function run(topicGoal, topicId = null) {
     const finalGoal = topicGoal ?? goal;
     if (!finalGoal.trim()) return;
     setStatus("loading");
     setError(null);
     setSaveStatus("idle");
+    setLastTopicId(topicId);
     try {
       const res = await assemblePlan({ goal: finalGoal });
       setResult(res.data);
@@ -89,7 +91,7 @@ export default function PlanAssembly({ uid }) {
       <p className="topic-picker-label">Pick a topic, or describe your own goal:</p>
       <div className="topic-picker">
         {TOPICS.map((t) => (
-          <button key={t.id} className="topic-chip" onClick={() => run(`Understand ${t.title}`)} disabled={status === "loading"}>
+          <button key={t.id} className="topic-chip" onClick={() => run(`Understand ${t.title}`, t.id)} disabled={status === "loading"}>
             {t.title}
           </button>
         ))}
@@ -192,6 +194,21 @@ export default function PlanAssembly({ uid }) {
           <button className="btn btn-primary btn-block" onClick={handleSave} disabled={saveStatus !== "idle"}>
             {saveStatus === "saved" ? "Saved to Path tab ✓" : saveStatus === "saving" ? "Saving..." : "Save this plan to Path"}
           </button>
+
+          {(() => {
+            const currentIdx = lastTopicId ? TOPICS.findIndex((t) => t.id === lastTopicId) : -1;
+            const next = currentIdx >= 0 && currentIdx + 1 < TOPICS.length ? TOPICS[currentIdx + 1] : null;
+            if (!next) return null;
+            return (
+              <div className="related-next">
+                Since you explored <strong>{TOPICS[currentIdx].title}</strong>, the next real step in this curriculum is{" "}
+                <strong>{next.title}</strong>.
+                <button className="related-next-btn" onClick={() => run(`Understand ${next.title}`, next.id)}>
+                  Build a plan for it →
+                </button>
+              </div>
+            );
+          })()}
         </div>
       )}
     </div>

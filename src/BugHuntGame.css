@@ -1,0 +1,120 @@
+.bug-hunt-picker {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 14px;
+}
+
+.bug-pick {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 100px;
+  padding: 6px 13px;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--ink-soft);
+  cursor: pointer;
+}
+
+.bug-pick.active {
+  background: var(--accent-tint);
+  border-color: var(--accent);
+  color: var(--accent-ink);
+  font-weight: 600;
+}
+
+.bug-pick.solved {
+  border-color: var(--accent2);
+  color: var(--accent2);
+}
+
+.bug-hunt-instructions {
+  font-size: 13px;
+  color: var(--ink-soft);
+  margin: 0 0 10px;
+}
+
+.bug-hunt-code {
+  width: 100%;
+  background: var(--code-bg);
+  color: var(--code-ink);
+  font-family: "IBM Plex Mono", ui-monospace, monospace;
+  font-size: 13px;
+  line-height: 1.6;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 12px 14px;
+  resize: vertical;
+  margin-bottom: 10px;
+}
+
+.bug-hunt-actions {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.bug-hint-btn {
+  background: none;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 10px 16px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink-soft);
+  cursor: pointer;
+}
+
+.bug-hunt-hint {
+  background: var(--accent-tint);
+  border: 1px solid var(--accent);
+  color: var(--accent-ink);
+  border-radius: 8px;
+  padding: 10px 12px;
+  font-size: 13px;
+  margin-bottom: 10px;
+}
+
+.bug-hunt-result {
+  border-radius: 8px;
+  padding: 12px 14px;
+  border: 1px solid var(--line);
+}
+
+.bug-hunt-result.correct {
+  background: var(--accent2-tint);
+  border-color: var(--accent2);
+}
+
+.bug-hunt-result.incorrect {
+  background: var(--danger-tint);
+  border-color: var(--danger);
+}
+
+.bug-hunt-output {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 12.5px;
+  margin: 0 0 8px;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.bug-hunt-verdict {
+  font-weight: 600;
+  font-size: 13.5px;
+  margin: 0 0 6px;
+}
+
+.bug-hunt-result.correct .bug-hunt-verdict {
+  color: var(--accent2);
+}
+
+.bug-hunt-result.incorrect .bug-hunt-verdict {
+  color: var(--danger);
+}
+
+.bug-hunt-explanation {
+  font-size: 13px;
+  color: var(--ink-soft);
+  margin: 0;
+}

@@ -190,6 +190,33 @@
   word-break: break-all;
 }
 
+.related-next {
+  margin-top: 14px;
+  padding: 12px 14px;
+  background: var(--accent-tint);
+  border: 1px solid var(--accent);
+  border-radius: 10px;
+  font-size: 13px;
+  color: var(--accent-ink);
+  line-height: 1.6;
+}
+
+.related-next-btn {
+  display: block;
+  margin-top: 8px;
+  background: none;
+  border: none;
+  color: var(--accent-ink);
+  font-weight: 700;
+  font-size: 13px;
+  cursor: pointer;
+  padding: 0;
+}
+
+.related-next-btn:hover {
+  text-decoration: underline;
+}
+
 .chat-tutor-btn {
   display: block;
   margin-top: 10px;

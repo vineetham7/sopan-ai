@@ -1,23 +1,16 @@
 import { useState } from "react";
+import { loadPyodideOnce } from "./pyodideLoader";
 import "./CodeBlock.css";
 
 export default function CodeBlock({ starterCode }) {
   const [code, setCode] = useState(starterCode);
   const [output, setOutput] = useState("");
-  const [pyodide, setPyodide] = useState(null);
   const [running, setRunning] = useState(false);
-
-  async function ensurePyodide() {
-    if (pyodide) return pyodide;
-    const py = await window.loadPyodide();
-    setPyodide(py);
-    return py;
-  }
 
   async function run() {
     setRunning(true);
     try {
-      const py = await ensurePyodide();
+      const py = await loadPyodideOnce();
       const result = await py.runPythonAsync(code);
       setOutput(String(result ?? ""));
     } catch (err) {
