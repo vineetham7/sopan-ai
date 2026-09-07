@@ -147,7 +147,7 @@
 
 .stat-row {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 220px));
+  grid-template-columns: repeat(3, minmax(0, 220px));
   gap: 1px;
   background: var(--line);
   border: 1px solid var(--line);
@@ -161,6 +161,21 @@
   background: var(--paper-raised);
   padding: 8px 16px;
   text-align: center;
+}
+
+button.stat-clickable {
+  border: none;
+  font-family: inherit;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+button.stat-clickable:hover {
+  background: var(--accent-tint);
+}
+
+button.stat-clickable .v {
+  color: var(--accent-ink) !important;
 }
 
 .stat-row .stat .v {
@@ -289,7 +304,7 @@
     font-size: 12.5px;
   }
   .stat-row {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(3, 1fr);
     width: 100%;
   }
   .stat-row .stat {
@@ -301,4 +316,51 @@
   .btn {
     transition: none;
   }
+}
+
+.about-footer {
+  border-top: 1px solid var(--line);
+  background: var(--paper-raised);
+  margin-top: 40px;
+}
+
+.about-footer-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+.about-footer-what,
+.about-footer-why {
+  font-size: 12.5px;
+  color: var(--ink-soft);
+  line-height: 1.6;
+  max-width: 720px;
+  margin: 0 0 10px;
+}
+
+.about-footer-why strong {
+  color: var(--ink);
+}
+
+.about-footer-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin-top: 12px;
+  font-size: 12.5px;
+}
+
+.about-footer-meta span {
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.about-footer-meta a {
+  color: var(--accent-ink);
+  text-decoration: none;
+}
+
+.about-footer-meta a:hover {
+  text-decoration: underline;
 }

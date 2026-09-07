@@ -2,12 +2,67 @@ import { useState } from "react";
 import "./WelcomeTour.css";
 
 const STEPS = [
-  { tab: "Diagnostic", body: "Start here — a real 32-question test finds out what you actually know, topic by topic. No self-reporting a skill level." },
-  { tab: "Path", body: "Your skill map: see what's locked, unlocked, or mastered, and when a topic is due for review." },
-  { tab: "Practice", body: "Run real Python right in your browser, no install — plus a Spot the Bug game to test yourself." },
-  { tab: "Plan", body: "Pick a topic and get a real, cited study plan, with flashcards, a quiz, and an AI tutor you can chat with." },
-  { tab: "Insta", body: "Real AI research papers and industry news, with bookmarking and filters — not a fake feed." },
-  { tab: "Sandbox", body: "Train a real image classifier on your own photos, and watch the actual math happen, step by step." },
+  {
+    tab: "Diagnostic",
+    intro: "Start here — find out what you actually know, topic by topic.",
+    points: [
+      "32 real questions — 4 per topic, across all 8 topics",
+      "Mixed from real MMLU/AGIEval benchmark questions and Gemini-generated ones",
+      "Pass a topic and it's marked mastered right away — no waiting through ones you already know",
+      "\"End test now\" lets you finish early any time; what you've completed still counts",
+    ],
+  },
+  {
+    tab: "Path",
+    intro: "Your skill map and where saved plans live.",
+    points: [
+      "Every topic shows locked / unlocked / mastered",
+      "Self-assessment chips: Confident, Shaky, Needs revision",
+      "Spaced repetition — a banner tells you exactly what's due for review",
+      "\"Take the deep check\" re-tests a topic with 10 fresh questions",
+      "Saved plans from the Plan tab show up here too, fully interactive",
+    ],
+  },
+  {
+    tab: "Practice",
+    intro: "Real code, running for real.",
+    points: [
+      "Write and run real Python, compiled to WebAssembly, right in your browser",
+      "Spot the Bug — 5 real Python bugs, checked by actually running your fix",
+    ],
+  },
+  {
+    tab: "Plan",
+    intro: "Build a study plan grounded in real material.",
+    points: [
+      "Pick a topic or type your own goal",
+      "A cited plan built from real source material, not invented",
+      "Auto-generated flashcards and a quiz for every plan",
+      "An AI Tutor chat on every step — ask anything, get real answers",
+      "A \"try this next\" suggestion points you at the next real topic",
+    ],
+  },
+  {
+    tab: "Insta",
+    intro: "Stay current, for real.",
+    points: [
+      "Real arXiv papers and Hugging Face Daily Papers",
+      "Real trending industry news from Hacker News — launches, funding, acquisitions",
+      "Filter by Research, Industry news, or your Bookmarks",
+      "Bookmark anything to come back to later",
+      "16 curated links if you want to follow more sources yourself",
+    ],
+  },
+  {
+    tab: "Sandbox",
+    intro: "Train a real model, watch the real math.",
+    points: [
+      "Train an image classifier on your own photos, live, in your browser",
+      "Watch the network actually learn, animated in real time",
+      "See the literal math behind a prediction, step by step",
+      "An honest warning if your sample is too small to really trust",
+    ],
+  },
 ];
 
 const STORAGE_KEY = "sopan-tour-seen";
@@ -26,7 +81,10 @@ export default function WelcomeTour({ onDone }) {
       <div className="tour-card">
         <div className="tour-eyebrow">Sopan AI · {index + 1} of {STEPS.length}</div>
         <h3 className="tour-tab-name">{step.tab}</h3>
-        <p className="tour-body">{step.body}</p>
+        <p className="tour-body">{step.intro}</p>
+        <ul className="tour-points">
+          {step.points.map((p, i) => <li key={i}>{p}</li>)}
+        </ul>
         <div className="tour-dots">
           {STEPS.map((_, i) => <span key={i} className={i === index ? "dot active" : "dot"} />)}
         </div>

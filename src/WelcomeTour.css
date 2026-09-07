@@ -20,7 +20,9 @@
   border: 1px solid var(--line);
   border-radius: 14px;
   box-shadow: var(--shadow);
-  max-width: 380px;
+  max-width: 440px;
+  max-height: 86vh;
+  overflow-y: auto;
   width: 100%;
   padding: 22px 24px;
   animation: tour-card-in 0.25s cubic-bezier(0.2, 0.8, 0.3, 1) both;
@@ -50,7 +52,21 @@
   font-size: 14px;
   color: var(--ink-soft);
   line-height: 1.55;
+  margin: 0 0 10px;
+}
+
+.tour-points {
   margin: 0 0 18px;
+  padding-left: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.tour-points li {
+  font-size: 13px;
+  color: var(--ink);
+  line-height: 1.5;
 }
 
 .tour-dots {
