@@ -28,7 +28,7 @@
 }
 
 .brand-row h1 {
-  font-size: clamp(18px, 4vw, 22px);
+  font-size: clamp(20px, 4.5vw, 25px);
   font-weight: 600;
   flex: none;
 }
@@ -243,13 +243,13 @@ button.stat-clickable .v {
 }
 
 .panel-head h2 {
-  font-size: clamp(18px, 4.5vw, 22px);
+  font-size: clamp(20px, 5vw, 26px);
   font-weight: 600;
   margin-bottom: 4px;
 }
 
 .panel-head p {
-  font-size: clamp(13px, 3vw, 14px);
+  font-size: clamp(14px, 3.2vw, 16px);
   color: var(--ink-soft);
   margin: 0;
 }
@@ -345,7 +345,7 @@ button.stat-clickable .v {
 
 .about-footer-what,
 .about-footer-why {
-  font-size: clamp(12px, 3vw, 12.5px);
+  font-size: clamp(13px, 3vw, 14px);
   color: var(--ink-soft);
   line-height: 1.6;
   max-width: 720px;

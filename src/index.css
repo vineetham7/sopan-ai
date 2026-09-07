@@ -24,10 +24,10 @@
     --ink: #eef1e8;
     --ink-soft: #a8b3aa;
     --line: #2c362f;
-    --accent: #d9a44f;
-    --accent-ink: #f0c579;
+    --accent: #fbbf6b;
+    --accent-ink: #ffd98a;
     --accent-tint: #2c2413;
-    --accent2: #4bab97;
+    --accent2: #5eead4;
     --accent2-tint: #172b26;
     --danger: #e0806c;
     --danger-tint: #2e1c17;
@@ -44,10 +44,10 @@
   --ink: #eef1e8;
   --ink-soft: #a8b3aa;
   --line: #2c362f;
-  --accent: #d9a44f;
-  --accent-ink: #f0c579;
+  --accent: #fbbf6b;
+  --accent-ink: #ffd98a;
   --accent-tint: #2c2413;
-  --accent2: #4bab97;
+  --accent2: #5eead4;
   --accent2-tint: #172b26;
   --danger: #e0806c;
   --danger-tint: #2e1c17;
@@ -70,18 +70,18 @@
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"])[data-accent="ocean"] {
-    --accent: #6bb3e0;
-    --accent-ink: #a8d4ee;
+    --accent: #7dd3fc;
+    --accent-ink: #bae6fd;
     --accent-tint: #16283a;
-    --accent2: #4fc3cc;
+    --accent2: #22d3ee;
     --accent2-tint: #123236;
   }
 }
 :root[data-theme="dark"][data-accent="ocean"] {
-  --accent: #6bb3e0;
-  --accent-ink: #a8d4ee;
+  --accent: #7dd3fc;
+  --accent-ink: #bae6fd;
   --accent-tint: #16283a;
-  --accent2: #4fc3cc;
+  --accent2: #22d3ee;
   --accent2-tint: #123236;
 }
 
@@ -94,18 +94,18 @@
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"])[data-accent="berry"] {
-    --accent: #e08cc4;
-    --accent-ink: #f0b8db;
+    --accent: #f472b6;
+    --accent-ink: #fbcfe8;
     --accent-tint: #3a1830;
-    --accent2: #a68fd6;
+    --accent2: #c084fc;
     --accent2-tint: #2a2140;
   }
 }
 :root[data-theme="dark"][data-accent="berry"] {
-  --accent: #e08cc4;
-  --accent-ink: #f0b8db;
+  --accent: #f472b6;
+  --accent-ink: #fbcfe8;
   --accent-tint: #3a1830;
-  --accent2: #a68fd6;
+  --accent2: #c084fc;
   --accent2-tint: #2a2140;
 }
 
@@ -168,8 +168,8 @@ body {
   background: var(--paper);
   color: var(--ink);
   font-family: "Public Sans", -apple-system, "Segoe UI", sans-serif;
-  font-size: 16px;
-  line-height: 1.5;
+  font-size: 17px;
+  line-height: 1.55;
   -webkit-font-smoothing: antialiased;
 }
 
