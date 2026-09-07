@@ -1,8 +1,17 @@
+.deep-check-top-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 10px;
+}
+
 .deep-check .meta {
   font-family: "IBM Plex Mono", monospace;
   font-size: 12px;
   color: var(--ink-soft);
-  margin-bottom: 10px;
+  margin-bottom: 0;
 }
 
 .deep-check .source-tag {

@@ -51,6 +51,7 @@ export default function Diagnostic({ onComplete }) {
   const [topicResults, setTopicResults] = useState([]); // [{ topicId, correct, total }]
   const [currentCorrect, setCurrentCorrect] = useState(0);
   const [done, setDone] = useState(false);
+  const [confirmingEnd, setConfirmingEnd] = useState(false);
 
   useEffect(() => {
     buildFullRun().then(setRun);
@@ -95,13 +96,24 @@ export default function Diagnostic({ onComplete }) {
     }
   }
 
+  function endEarly() {
+    // Only fully-completed topics count — the in-progress topic's partial
+    // answers aren't a fair 3/4-style score, so they're dropped rather than
+    // recorded as a failure. applyFullDiagnosticResult already treats any
+    // topic missing from the results as "not yet assessed," so this is safe.
+    setDone(true);
+    onComplete?.(topicResults);
+  }
+
   if (done) {
     const totalCorrect = topicResults.reduce((s, r) => s + r.correct, 0);
     const totalQuestions = topicResults.reduce((s, r) => s + r.total, 0);
+    const endedEarly = topicResults.length < totalTopics;
     return (
       <div className="diagnostic done">
         <p className="verdict">
-          {totalCorrect}/{totalQuestions} correct across all 8 topics.
+          {totalCorrect}/{totalQuestions} correct across {topicResults.length} of {totalTopics} topics
+          {endedEarly ? " (ended early)" : ""}.
         </p>
         <ul className="topic-results">
           {topicResults.map((r) => {
@@ -115,17 +127,33 @@ export default function Diagnostic({ onComplete }) {
             );
           })}
         </ul>
-        <p className="explanation">Your Path tab has been updated to match — every topic you scored 3/4 or better on is marked mastered directly, even skipping ahead. Retake anytime for a fresh run.</p>
+        <p className="explanation">
+          Your Path tab has been updated to match — every topic you scored 3/4 or better on is marked mastered directly, even skipping ahead.
+          {endedEarly ? " Topics you didn't reach are left unassessed rather than marked as failed — come back and retake anytime to cover the rest." : " Retake anytime for a fresh run."}
+        </p>
       </div>
     );
   }
 
   return (
     <div className="diagnostic">
-      <p className="meta">
-        Topic {topicIndex + 1}/{totalTopics}: {topic.title} · question {qIndex + 1}/{questionsInTopic}
-        {current.source && <span className="source-tag"> · {current.source}</span>}
-      </p>
+      <div className="diagnostic-top-row">
+        <p className="meta">
+          Topic {topicIndex + 1}/{totalTopics}: {topic.title} · question {qIndex + 1}/{questionsInTopic}
+          {current.source && <span className="source-tag"> · {current.source}</span>}
+        </p>
+        {!confirmingEnd ? (
+          <button className="end-early-btn" onClick={() => setConfirmingEnd(true)}>End test now</button>
+        ) : (
+          <span className="end-early-confirm">
+            {topicResults.length === 0
+              ? "End with no topics scored yet?"
+              : `End here? ${topicResults.length}/${totalTopics} topics scored so far.`}
+            <button className="end-early-confirm-yes" onClick={endEarly}>Yes, end it</button>
+            <button className="end-early-confirm-no" onClick={() => setConfirmingEnd(false)}>Keep going</button>
+          </span>
+        )}
+      </div>
       <p className="prompt">{current.prompt}</p>
       <ul className="options">
         {current.options.map((opt, i) => {
