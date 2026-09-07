@@ -26,6 +26,15 @@
 
 Most "learn AI" platforms ask you to self-report a skill level, then hand everyone the same fixed syllabus regardless of the answer. Sopan AI diagnoses instead of asking — a real placement test drives a per-topic skill graph, not one score — and its centerpiece is a sandbox where you train an actual model and watch the real math happen, not a canned animation of one.
 
+This was built for Patchamomma 2026, but the actual motivation behind it is broader than the competition: **learning — and especially sustainable, self-paced learning — should be accessible to anyone**, not gated by cost, prior background, or a rigid one-size-fits-all curriculum. The same skill-graph approach that adapts to an experienced developer brushing up on transformers also works for a complete beginner starting with Python basics — nothing in the platform assumes a floor of prior knowledge, and nothing punishes someone for already knowing more than average. A curious kid learning their first "what is a variable" and a working adult picking up applied LLMs can both use the same app, at their own actual level, for free.
+
+Concretely, a few things in the build reflect that goal directly (see [Accessibility](#accessibility--and-its-real-limits) for what's actually been validated and what hasn't):
+- **Free to use** — anonymous sign-in on load, no account, no paywall, ever
+- **Dark mode**, for low-light use and reduced eye strain
+- **A dyslexia-friendly font toggle**
+- **A colorblind-safe palette toggle**
+- **Optional Google sign-in** only if you want progress to follow you across devices — never required
+
 ## Tech stack
 
 | Layer | Technology | What it's used for |
@@ -179,9 +188,18 @@ Upload a handful of your own photos for two classes (e.g. "Cats" vs "Dogs"), and
 ### Cross-cutting
 
 - **Auth**: anonymous on first load, optional "Save your progress — sign in with Google" upgrade that preserves all existing data
-- **Theming**: light/dark (respects system preference, overridable), dyslexia-friendly font toggle, colorblind-safe palette toggle
+- **Theming**: light/dark (respects system preference, overridable), dyslexia-friendly font toggle, colorblind-safe palette toggle — see [Accessibility](#accessibility--and-its-real-limits) below
 - **Cost tracker**: a real ₹0.00 in the header, since everything runs on free tiers by design
 - **Responsive**: a real website layout (sticky top nav, content reflows for mobile), not a phone-app frame squeezed into a browser
+
+## Accessibility — and its real limits
+
+Two toggles exist in the header, next to the theme switch:
+
+- **"Aa" — dyslexia-friendly font**: swaps body and heading text to OpenDyslexic, a font specifically designed with weighted bottoms and varied letter shapes intended to reduce letter-swapping/flipping, and increases letter-spacing and line-height.
+- **"◐" — colorblind-safe palette**: swaps the app's two semantic signal colors (the "mastered/success" green and the "error/danger" red) to the Okabe-Ito blue/orange pair, a palette specifically designed to stay distinguishable across the common forms of color vision deficiency, instead of the red/green pairing that's the classic failure case.
+
+**Honestly**: both are good-faith implementations of established, published accessibility guidance — not something built or validated by an accessibility expert, and not tested with real users who have dyslexia or color vision deficiency. OpenDyslexic itself has mixed evidence in the research literature on how much it actually helps reading speed/comprehension versus a plain, well-spaced sans-serif — it's offered as an easy, free option to try, not a proven fix. Treat both toggles as "worth having and easy to turn on," not as a validated accessibility certification.
 
 ---
 
