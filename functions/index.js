@@ -333,6 +333,52 @@ exports.generateTopicQuestions = onCall({secrets: [geminiKey]}, async (request) 
   return {items};
 });
 
+// Generates one Spot-the-Bug puzzle on demand. Unlike the plan builder,
+// this doesn't need to be grounded in cited material — but the *expected
+// output* still can't just be Gemini's own claim about what the code does,
+// since an LLM can be confidently wrong about program behavior. So this
+// only returns the buggy code and its claimed-correct fix; the actual
+// ground-truth output is computed client-side by running correctFixedCode
+// through the real Pyodide interpreter already loaded for the game.
+exports.generateBugHuntPuzzle = onCall({secrets: [geminiKey]}, async () => {
+  const ai = new GoogleGenAI({apiKey: geminiKey.value()});
+
+  let interaction;
+  try {
+    interaction = await ai.interactions.create({
+      model: GEMINI_MODEL,
+      input:
+        "Generate one realistic, common Python bug a beginner or intermediate programmer might introduce, " +
+        "for a \"spot the bug\" learning game. Respond with strict JSON only: an object " +
+        "{\"title\": \"...\", \"goal\": \"...\", \"buggyCode\": \"...\", \"correctFixedCode\": \"...\", \"hint\": \"...\", \"explanation\": \"...\"}.\n" +
+        "title: a short (4-7 word) name for the bug.\n" +
+        "goal: one sentence stating exactly what the code is SUPPOSED to do or print — specific enough that someone " +
+        "could tell whether their own fix is right without seeing the answer.\n" +
+        "buggyCode: 3-8 lines of real Python with exactly one realistic bug, ending in one or more print() calls so " +
+        "the bug is visible in the output. Vary the bug type — off-by-one, mutable default argument, wrong operator, " +
+        "type mismatch, index error, mutating a list while iterating, scope/closure issues, etc.\n" +
+        "correctFixedCode: the exact same code with ONLY the bug fixed — same print() calls, same variable names, " +
+        "same structure, so the output is directly comparable.\n" +
+        "hint: one sentence nudging toward the bug without revealing the fix.\n" +
+        "explanation: one sentence explaining the bug and the fix, shown after the learner solves it or gives up.\n" +
+        "No markdown, no extra text, JSON object only.",
+    });
+  } catch (err) {
+    throw new HttpsError("unavailable", `Couldn't generate a puzzle: ${err.message}`);
+  }
+
+  try {
+    const cleaned = interaction.output_text.trim().replace(/^```json\s*|\s*```$/g, "");
+    const parsed = JSON.parse(cleaned);
+    if (!parsed.buggyCode || !parsed.correctFixedCode || !parsed.goal) {
+      throw new Error("missing required fields");
+    }
+    return parsed;
+  } catch {
+    throw new HttpsError("internal", "Gemini's response wasn't valid JSON.");
+  }
+});
+
 // An interactive AI tutor scoped to one plan step. Unlike assemblePlan (which
 // must never say anything the matched source material doesn't support), a
 // tutoring conversation is expected to draw on the model's own knowledge to

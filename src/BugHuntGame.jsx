@@ -1,23 +1,31 @@
 import { useState } from "react";
+import { httpsCallable } from "firebase/functions";
+import { functions } from "./firebase";
 import { loadPyodideOnce } from "./pyodideLoader";
 import "./BugHuntGame.css";
+
+const generateBugHuntPuzzle = httpsCallable(functions, "generateBugHuntPuzzle");
 
 // Five real, common Python bugs — not toy examples. Each is verified by
 // actually running the learner's code through Pyodide and comparing real
 // captured stdout against the real correct output, not just "did it run
-// without throwing" (a bug can run fine and just be wrong).
-const PUZZLES = [
+// without throwing" (a bug can run fine and just be wrong). "goal" states
+// plainly what the code is supposed to do — without it, there's no way to
+// know what counts as fixed.
+const STARTER_PUZZLES = [
   {
     id: "off-by-one",
     title: "Off-by-one in a range",
+    goal: "Print the sum of the numbers 1 through 5 (inclusive) — the correct answer is 15.",
     buggyCode: `total = 0\nfor i in range(1, 5):\n    total += i\nprint(total)`,
-    hint: "The loop is supposed to add up 1 through 5. Check what range(1, 5) actually produces.",
+    hint: "Check exactly which numbers range(1, 5) actually produces.",
     fixExplanation: "range(1, 5) stops before 5, giving 1,2,3,4 (sum 10). To include 5, it needs range(1, 6).",
     expectedOutput: "15",
   },
   {
     id: "mutable-default",
     title: "The shared mutable default argument",
+    goal: "Each call to add_item() should return only the items passed to that call and earlier ones with an explicit list — not silently share state with unrelated calls. Calling it with \"a\" then \"b\" (both with no items argument) should print two separate single-item lists.",
     buggyCode: `def add_item(item, items=[]):\n    items.append(item)\n    return items\n\nprint(add_item("a"))\nprint(add_item("b"))`,
     hint: "A default argument's value is created once, the first time the function is defined — not fresh on every call.",
     fixExplanation: "items=[] is the *same list* reused across every call with no explicit items argument. Fix: default to None, and create a new list inside the function if it's None.",
@@ -26,6 +34,7 @@ const PUZZLES = [
   {
     id: "string-int-concat",
     title: "Mixing text and numbers",
+    goal: "Print the sentence: I am 25 years old",
     buggyCode: `age = 25\nprint("I am " + age + " years old")`,
     hint: "Python won't silently convert a number to text for you the way some languages do.",
     fixExplanation: "You can't + a string and an int directly. Fix: wrap age in str(age), or use an f-string: f\"I am {age} years old\".",
@@ -34,6 +43,7 @@ const PUZZLES = [
   {
     id: "index-out-of-range",
     title: "One index too far",
+    goal: "Print the last item in the fruits list — \"cherry\".",
     buggyCode: `fruits = ["apple", "banana", "cherry"]\nprint(fruits[3])`,
     hint: "A list with 3 items has valid indices 0, 1, and 2 — not 3.",
     fixExplanation: "fruits[3] would be the 4th item, which doesn't exist. The last real item is fruits[2] (or fruits[-1]).",
@@ -42,6 +52,7 @@ const PUZZLES = [
   {
     id: "mutate-while-iterating",
     title: "Changing a list while looping over it",
+    goal: "Remove every even number from the list, leaving only the odd ones — the result should be [1, 3, 5].",
     buggyCode: `numbers = [1, 2, 3, 4, 5, 6]\nfor n in numbers:\n    if n % 2 == 0:\n        numbers.remove(n)\nprint(numbers)`,
     hint: "Removing items from a list while a for-loop is walking through it makes the loop skip the next item.",
     fixExplanation: "Loop over a copy instead — numbers[:] or list(numbers) — so removing from the real list doesn't shift positions out from under the loop.",
@@ -62,18 +73,21 @@ async function runCapturingStdout(code) {
 }
 
 export default function BugHuntGame() {
+  const [puzzles, setPuzzles] = useState(STARTER_PUZZLES);
   const [index, setIndex] = useState(0);
-  const [code, setCode] = useState(PUZZLES[0].buggyCode);
+  const [code, setCode] = useState(STARTER_PUZZLES[0].buggyCode);
   const [result, setResult] = useState(null); // { output, correct }
   const [running, setRunning] = useState(false);
+  const [generating, setGenerating] = useState(false);
+  const [genError, setGenError] = useState(null);
   const [showHint, setShowHint] = useState(false);
   const [solved, setSolved] = useState({});
 
-  const puzzle = PUZZLES[index];
+  const puzzle = puzzles[index];
 
   function pick(i) {
     setIndex(i);
-    setCode(PUZZLES[i].buggyCode);
+    setCode(puzzles[i].buggyCode);
     setResult(null);
     setShowHint(false);
   }
@@ -92,22 +106,74 @@ export default function BugHuntGame() {
     }
   }
 
+  async function generateNew() {
+    setGenerating(true);
+    setGenError(null);
+    try {
+      const res = await generateBugHuntPuzzle();
+      const p = res.data;
+      // The ground truth is never Gemini's own claim about output — it's
+      // whatever the real Pyodide interpreter actually produces when running
+      // the fix Gemini says is correct. If Gemini's fix doesn't compile or
+      // doesn't differ from the buggy version, this puzzle is discarded
+      // rather than shipped with an untrustworthy answer key.
+      const expectedOutput = await runCapturingStdout(p.correctFixedCode);
+      if (expectedOutput.startsWith("Error") || expectedOutput.includes("Error:")) {
+        throw new Error("Generated puzzle's fix didn't run cleanly — try generating again.");
+      }
+      const newPuzzle = {
+        id: `ai-${Date.now()}`,
+        title: p.title || "AI-generated bug",
+        goal: p.goal,
+        buggyCode: p.buggyCode,
+        hint: p.hint || "Look closely at what changed from what you'd expect.",
+        fixExplanation: p.explanation || "",
+        expectedOutput,
+        aiGenerated: true,
+      };
+      // The new puzzle's real index is the array's length *before* this
+      // append — capture that now, not via pick(puzzles.length) after
+      // setPuzzles, which would try to read the new item out of the old
+      // (not-yet-updated) array and crash on undefined.
+      const newIndex = puzzles.length;
+      setPuzzles((prev) => [...prev, newPuzzle]);
+      setIndex(newIndex);
+      setCode(newPuzzle.buggyCode);
+      setResult(null);
+      setShowHint(false);
+    } catch (err) {
+      setGenError(err.message ?? String(err));
+    } finally {
+      setGenerating(false);
+    }
+  }
+
   return (
     <div className="bug-hunt">
       <div className="bug-hunt-picker">
-        {PUZZLES.map((p, i) => (
+        {puzzles.map((p, i) => (
           <button
             key={p.id}
             className={`bug-pick ${i === index ? "active" : ""} ${solved[p.id] ? "solved" : ""}`}
             onClick={() => pick(i)}
           >
-            {solved[p.id] ? "✓ " : ""}{p.title}
+            {solved[p.id] ? "✓ " : ""}{p.aiGenerated ? "✨ " : ""}{p.title}
           </button>
         ))}
+        <button className="bug-pick bug-pick-generate" onClick={generateNew} disabled={generating}>
+          {generating ? "Generating..." : "✨ Generate a new bug"}
+        </button>
+      </div>
+
+      {genError && <p className="bug-hunt-gen-error">{genError}</p>}
+
+      <div className="bug-hunt-goal">
+        <span className="bug-hunt-goal-label">Goal</span>
+        {puzzle.goal}
       </div>
 
       <p className="bug-hunt-instructions">
-        This code has a real bug. Edit it below, then run it — a real Python interpreter checks your fix.
+        The code below doesn't do that yet. Edit it, then run it — a real Python interpreter checks your fix.
       </p>
 
       <textarea
@@ -131,13 +197,13 @@ export default function BugHuntGame() {
 
       {result && (
         <div className={`bug-hunt-result ${result.correct ? "correct" : "incorrect"}`}>
-          <p className="bug-hunt-output"><strong>Output:</strong> {result.output || "(nothing printed)"}</p>
+          <p className="bug-hunt-output"><strong>Your output:</strong> {result.output || "(nothing printed)"}</p>
           {result.correct ? (
-            <p className="bug-hunt-verdict">✓ Fixed! That's the real, correct output.</p>
+            <p className="bug-hunt-verdict">✓ Fixed! That matches the goal exactly.</p>
           ) : (
             <>
               <p className="bug-hunt-verdict">Not quite — expected: {puzzle.expectedOutput}</p>
-              <p className="bug-hunt-explanation">{puzzle.fixExplanation}</p>
+              {puzzle.fixExplanation && <p className="bug-hunt-explanation">{puzzle.fixExplanation}</p>}
             </>
           )}
         </div>

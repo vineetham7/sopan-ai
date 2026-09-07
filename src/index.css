@@ -57,6 +57,58 @@
   --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 24px -12px rgba(0, 0, 0, 0.5);
 }
 
+/* Accent color options — the base warm gold/teal palette is the default
+   ("warm"); these swap only the two accent hues, never the paper/ink base,
+   so contrast and readability stay identical to the palette already tuned
+   for both light and dark. */
+:root[data-accent="ocean"] {
+  --accent: #1d5c8a;
+  --accent-ink: #123f5e;
+  --accent-tint: #dce9f3;
+  --accent2: #0e7c86;
+  --accent2-tint: #d9eef0;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"])[data-accent="ocean"] {
+    --accent: #6bb3e0;
+    --accent-ink: #a8d4ee;
+    --accent-tint: #16283a;
+    --accent2: #4fc3cc;
+    --accent2-tint: #123236;
+  }
+}
+:root[data-theme="dark"][data-accent="ocean"] {
+  --accent: #6bb3e0;
+  --accent-ink: #a8d4ee;
+  --accent-tint: #16283a;
+  --accent2: #4fc3cc;
+  --accent2-tint: #123236;
+}
+
+:root[data-accent="berry"] {
+  --accent: #8a3d6e;
+  --accent-ink: #5e2649;
+  --accent-tint: #f3dcec;
+  --accent2: #6b4fa0;
+  --accent2-tint: #e8e0f5;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"])[data-accent="berry"] {
+    --accent: #e08cc4;
+    --accent-ink: #f0b8db;
+    --accent-tint: #3a1830;
+    --accent2: #a68fd6;
+    --accent2-tint: #2a2140;
+  }
+}
+:root[data-theme="dark"][data-accent="berry"] {
+  --accent: #e08cc4;
+  --accent-ink: #f0b8db;
+  --accent-tint: #3a1830;
+  --accent2: #a68fd6;
+  --accent2-tint: #2a2140;
+}
+
 /* Colorblind-safe mode — swaps the mastered/error signal colors to the
    Okabe-Ito blue/orange pair, distinguishable across all common forms of
    color vision deficiency. Overrides both themes equally since these two

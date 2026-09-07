@@ -50,6 +50,7 @@ function App() {
   const [theme, setTheme] = useState(getInitialTheme)
   const [dyslexiaFont, setDyslexiaFont] = useState(() => getInitialFlag('sopan-dyslexia'))
   const [colorblind, setColorblind] = useState(() => getInitialFlag('sopan-colorblind'))
+  const [accent, setAccent] = useState(() => localStorage.getItem('sopan-accent') || 'warm')
   const [showTour, setShowTour] = useState(shouldShowTour)
 
   useEffect(() => {
@@ -67,6 +68,16 @@ function App() {
     document.documentElement.setAttribute('data-theme', theme)
     localStorage.setItem('sopan-theme', theme)
   }, [theme])
+
+  useEffect(() => {
+    document.documentElement.setAttribute('data-accent', accent)
+    localStorage.setItem('sopan-accent', accent)
+  }, [accent])
+
+  const ACCENTS = ['warm', 'ocean', 'berry']
+  function cycleAccent() {
+    setAccent(ACCENTS[(ACCENTS.indexOf(accent) + 1) % ACCENTS.length])
+  }
 
   useEffect(() => {
     document.documentElement.setAttribute('data-dyslexia', String(dyslexiaFont))
@@ -136,6 +147,14 @@ function App() {
                   title={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
                 >
                   {theme === 'dark' ? '☀' : '☾'}
+                </button>
+                <button
+                  className="toolbar-btn accent-swatch-btn"
+                  onClick={cycleAccent}
+                  aria-label={`Color theme: ${accent}. Click to change.`}
+                  title={`Color theme: ${accent} (click to change)`}
+                >
+                  <span className="accent-swatch" />
                 </button>
                 <a
                   className="toolbar-btn"
@@ -282,7 +301,7 @@ function App() {
           <p className="about-footer-what">
             <strong>Sopan AI</strong> is an adaptive AI/ML learning platform — a real diagnostic, a personalized
             RAG-grounded curriculum, and a live sandbox to train and understand a real model, built to be free and
-            usable by anyone, from a beginner to someone brushing up before an interview.
+            usable by anyone.
           </p>
           <p className="about-footer-why">
             Built for <strong>Patchamomma</strong>, a Google Cloud–backed initiative (with the Code Vipassana
