@@ -341,6 +341,7 @@ button.stat-clickable .v {
   max-width: 1100px;
   margin: 0 auto;
   padding: clamp(16px, 4vw, 24px);
+  text-align: center;
 }
 
 .about-footer-what,
@@ -349,7 +350,7 @@ button.stat-clickable .v {
   color: var(--ink-soft);
   line-height: 1.6;
   max-width: 720px;
-  margin: 0 0 10px;
+  margin: 0 auto 10px;
 }
 
 .about-footer-why strong {
@@ -359,21 +360,36 @@ button.stat-clickable .v {
 .about-footer-meta {
   display: flex;
   flex-wrap: wrap;
-  gap: 14px;
-  margin-top: 12px;
-  font-size: 12.5px;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(10px, 3vw, 28px);
+  margin-top: 18px;
+  font-size: 13px;
 }
 
-.about-footer-meta span {
-  font-weight: 600;
+.about-footer-name {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 700;
   color: var(--ink);
 }
 
-.about-footer-meta a {
+.about-footer-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
   color: var(--accent-ink);
+  background: var(--accent-tint);
+  border: 1px solid var(--accent);
+  border-radius: 100px;
+  padding: 7px 16px;
+  font-weight: 600;
   text-decoration: none;
+  transition: opacity 0.15s ease, transform 0.15s ease;
 }
 
-.about-footer-meta a:hover {
-  text-decoration: underline;
+.about-footer-link:hover {
+  opacity: 0.85;
+  transform: translateY(-1px);
 }
