@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import { httpsCallable } from "firebase/functions";
 import { functions } from "./firebase";
 import "./StepTutorChat.css";
@@ -68,9 +69,9 @@ export default function StepTutorChat({ topicTitle, topicContext, open, onClose 
   // and reopening just makes it visible again, same thread continues.
   if (!open) return null;
 
-  return (
-    <div className="tutor-modal-overlay" onClick={onClose}>
-      <div className="tutor-modal" onClick={(e) => e.stopPropagation()}>
+  return createPortal(
+    <div className="tutor-modal-overlay">
+      <div className="tutor-modal">
         <div className="tutor-modal-head">
           <div>
             <span className="tutor-modal-eyebrow">AI Tutor</span>
@@ -117,6 +118,7 @@ export default function StepTutorChat({ topicTitle, topicContext, open, onClose 
           </button>
         </form>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }

@@ -1,37 +1,44 @@
+/* A docked side panel, not a centered modal — the plan/step content stays
+   fully visible and interactive on the left while you chat on the right.
+   Rendered via a React portal straight into <body>, so it's immune to any
+   ancestor's CSS transform/animation quietly turning "fixed" into "trapped
+   inside a card" (a real bug this replaced — a transform on an ancestor
+   creates a new containing block for position:fixed descendants). */
 .tutor-modal-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(27, 36, 32, 0.45);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 20px;
   z-index: 100;
-  animation: tutor-overlay-in 0.2s ease both;
-}
-
-@keyframes tutor-overlay-in {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  pointer-events: none;
 }
 
 .tutor-modal {
+  pointer-events: auto;
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 400px;
+  max-width: 92vw;
   background: var(--paper);
-  border: 1px solid var(--line);
-  border-radius: 14px;
+  border-left: 1px solid var(--line);
   box-shadow: var(--shadow);
-  width: 100%;
-  max-width: 520px;
-  max-height: 82vh;
+  border-radius: 0;
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  animation: tutor-modal-in 0.25s cubic-bezier(0.2, 0.8, 0.3, 1) both;
+  animation: tutor-panel-in 0.25s cubic-bezier(0.2, 0.8, 0.3, 1) both;
 }
 
-@keyframes tutor-modal-in {
-  from { opacity: 0; transform: translateY(12px) scale(0.98); }
-  to { opacity: 1; transform: translateY(0) scale(1); }
+@keyframes tutor-panel-in {
+  from { transform: translateX(100%); }
+  to { transform: translateX(0); }
+}
+
+@media (max-width: 640px) {
+  .tutor-modal {
+    width: 100%;
+    max-width: 100%;
+  }
 }
 
 .tutor-modal-head {
