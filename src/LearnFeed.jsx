@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { httpsCallable } from "firebase/functions";
 import { functions } from "./firebase";
+import { toggleBookmark, getBookmarks } from "./bookmarkStore";
 import "./LearnFeed.css";
 
 const getAiFeed = httpsCallable(functions, "getAiFeed");
@@ -90,15 +91,29 @@ function ExploreSources() {
   );
 }
 
-export default function LearnFeed({ onNavigate }) {
+export default function LearnFeed({ onNavigate, uid }) {
   const [status, setStatus] = useState("loading"); // loading | error | done
   const [items, setItems] = useState([]);
   const [openId, setOpenId] = useState(null);
   const [offset, setOffset] = useState(0);
   const [loadingMore, setLoadingMore] = useState(false);
   const [error, setError] = useState(null);
-  const [filter, setFilter] = useState("all"); // all | paper | news
+  const [filter, setFilter] = useState("all"); // all | paper | news | bookmarked
+  const [bookmarks, setBookmarks] = useState([]);
   const loadedOnce = useRef(false);
+
+  useEffect(() => {
+    if (uid) getBookmarks(uid).then(setBookmarks);
+  }, [uid]);
+
+  async function handleToggleBookmark(item) {
+    const updated = await toggleBookmark(uid, item);
+    setBookmarks(updated);
+  }
+
+  function isBookmarked(url) {
+    return bookmarks.some((b) => b.url === url);
+  }
 
   async function load(nextOffset = 0, append = false) {
     if (append) setLoadingMore(true);
@@ -126,14 +141,21 @@ export default function LearnFeed({ onNavigate }) {
     load(0, false);
   }, []);
 
-  const openItem = items.find((i) => i.url === openId);
-  const visibleItems = filter === "all" ? items : items.filter((i) => i.kind === filter);
+  const openItem = items.find((i) => i.url === openId) || bookmarks.find((i) => i.url === openId);
+  const visibleItems = filter === "all" ? items
+    : filter === "bookmarked" ? bookmarks
+    : items.filter((i) => i.kind === filter);
 
   if (openItem) {
     const isNews = openItem.kind === "news";
     return (
       <div className="card learn-feed insta-detail">
-        <button className="back-btn" onClick={() => setOpenId(null)}>← Back to feed</button>
+        <div className="detail-top-row">
+          <button className="back-btn" onClick={() => setOpenId(null)}>← Back to feed</button>
+          <button className="bookmark-btn" onClick={() => handleToggleBookmark(openItem)} aria-label="Toggle bookmark">
+            {isBookmarked(openItem.url) ? "★ Bookmarked" : "☆ Bookmark"}
+          </button>
+        </div>
         <div className="feed-meta">
           <span className="source-badge">{isNews ? "🗞" : "📄"} {openItem.source}</span>
           <span className={`badge ${openItem.significance}`}>{openItem.significance === "breakthrough" ? "🔥 Breakthrough" : "Update"}</span>
@@ -174,19 +196,34 @@ export default function LearnFeed({ onNavigate }) {
 
       {status === "done" && (
         <div className="feed-filters">
-          {[["all", "All"], ["paper", "Research"], ["news", "Industry news"]].map(([id, label]) => (
+          {[["all", "All"], ["paper", "Research"], ["news", "Industry news"], ["bookmarked", `Bookmarked${bookmarks.length ? ` (${bookmarks.length})` : ""}`]].map(([id, label]) => (
             <button key={id} className={filter === id ? "active" : ""} onClick={() => setFilter(id)}>{label}</button>
           ))}
         </div>
       )}
 
-      {status === "done" && (
+      {status === "done" && filter === "bookmarked" && bookmarks.length === 0 && (
+        <div className="card"><p className="state-msg">No bookmarks yet — tap the ☆ on any card to save it here.</p></div>
+      )}
+
+      {status === "done" && visibleItems.length > 0 && (
         <div className="kanban-grid">
           {visibleItems.map((item) => (
             <button key={item.url} className="kanban-card" onClick={() => setOpenId(item.url)}>
               <div className="feed-meta">
                 <span className="source-badge">{item.kind === "news" ? "🗞" : "📄"} {item.source}</span>
-                <span className={`badge ${item.significance}`}>{item.significance === "breakthrough" ? "🔥" : ""}</span>
+                <span className="kanban-card-actions">
+                  <span
+                    className="bookmark-toggle"
+                    role="button"
+                    tabIndex={0}
+                    onClick={(e) => { e.stopPropagation(); handleToggleBookmark(item); }}
+                    aria-label="Toggle bookmark"
+                  >
+                    {isBookmarked(item.url) ? "★" : "☆"}
+                  </span>
+                  <span className={`badge ${item.significance}`}>{item.significance === "breakthrough" ? "🔥" : ""}</span>
+                </span>
               </div>
               <div className="kanban-title">{item.title}</div>
               <p className="kanban-summary">{item.kind === "news" ? item.whyItMatters : item.oneLiner}</p>
@@ -196,7 +233,7 @@ export default function LearnFeed({ onNavigate }) {
         </div>
       )}
 
-      {status === "done" && (
+      {status === "done" && filter !== "bookmarked" && (
         <button className="btn btn-primary btn-block load-more" onClick={() => load(offset + 6, true)} disabled={loadingMore}>
           {loadingMore ? "Loading more..." : "Load more"}
         </button>

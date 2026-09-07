@@ -14,6 +14,7 @@ export default function PlanTracker({ uid }) {
   const [openSteps, setOpenSteps] = useState({}); // "planId:stepId" -> bool
   const [chatMounted, setChatMounted] = useState({}); // "planId:stepId" -> bool, once true stays true
   const [chatOpen, setChatOpen] = useState({}); // "planId:stepId" -> bool, toggled by open/close
+  const [quizTutorContext, setQuizTutorContext] = useState({}); // planId -> context string
 
   function sectionFor(planId) {
     return sections[planId] || "steps";
@@ -30,6 +31,15 @@ export default function PlanTracker({ uid }) {
   }
   function closeStepChat(key) {
     setChatOpen((prev) => ({ ...prev, [key]: false }));
+  }
+
+  function askTutorAboutQuestion(planId, { prompt, answer, explanation }) {
+    setQuizTutorContext((prev) => ({
+      ...prev,
+      [planId]: `I got this quiz question wrong: "${prompt}" — the correct answer was "${answer}".` +
+        (explanation ? ` Explanation given: ${explanation}` : ""),
+    }));
+    openStepChat(`${planId}:quiz`);
   }
 
   useEffect(() => {
@@ -143,7 +153,16 @@ export default function PlanTracker({ uid }) {
                           setPlans((prev) => prev.map((p) => (p.id === plan.id ? { ...p, quizBest: { score, total, at: new Date().toISOString() } } : p)));
                         }
                       }}
+                      onAskTutor={(q) => askTutorAboutQuestion(plan.id, q)}
                     />
+                    {chatMounted[`${plan.id}:quiz`] && (
+                      <StepTutorChat
+                        topicTitle="Your missed quiz question"
+                        topicContext={quizTutorContext[plan.id]}
+                        open={!!chatOpen[`${plan.id}:quiz`]}
+                        onClose={() => closeStepChat(`${plan.id}:quiz`)}
+                      />
+                    )}
                   </div>
                 )}
 

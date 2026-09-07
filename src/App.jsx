@@ -11,6 +11,7 @@ import PlanTracker from './PlanTracker'
 import LearnFeed from './LearnFeed'
 import MLSandbox from './MLSandbox'
 import { applyFullDiagnosticResult } from './applyFullDiagnosticResult'
+import { isDue } from './sm2'
 import './App.css'
 
 const TABS = [
@@ -69,6 +70,7 @@ function App() {
   const mastered = skillNodes.filter((n) => n.status === 'mastered').length
   const total = skillNodes.length
   const masteryPct = total > 0 ? Math.round((mastered / total) * 100) : 0
+  const dueNodes = skillNodes.filter(isDue)
 
   if (authLoading || !user) {
     return (
@@ -123,6 +125,16 @@ function App() {
                 >
                   {theme === 'dark' ? '☀' : '☾'}
                 </button>
+                <a
+                  className="toolbar-btn"
+                  href="https://github.com/vineetham7/sopan-ai"
+                  target="_blank"
+                  rel="noreferrer"
+                  aria-label="View source on GitHub"
+                  title="View source on GitHub"
+                >
+                  {'</>'}
+                </a>
               </div>
             </div>
           </div>
@@ -148,10 +160,6 @@ function App() {
               <div className="v">{mastered}/{total}</div>
               <div className="l">Nodes</div>
             </div>
-            <div className="stat">
-              <div className="v">₹0.00</div>
-              <div className="l">Compute cost</div>
-            </div>
           </div>
         </div>
       </header>
@@ -171,6 +179,15 @@ function App() {
 
         {tab === 'path' && (
           <section>
+            {dueNodes.length > 0 && (
+              <div className="due-banner">
+                <span className="due-banner-icon">⏰</span>
+                <span>
+                  <strong>{dueNodes.length} topic{dueNodes.length === 1 ? '' : 's'} due for review</strong>
+                  {' — '}{dueNodes.map((n) => n.title).join(', ')}
+                </span>
+              </div>
+            )}
             <div className="panel-head">
               <h2>Your prerequisite map</h2>
               <p>Status comes from your diagnostic. Tell us how each topic actually feels.</p>
@@ -219,7 +236,7 @@ function App() {
               <h2>Insta</h2>
               <p>Stay current on AI — real papers as cards, tap one, then try it yourself.</p>
             </div>
-            <LearnFeed onNavigate={setTab} />
+            <LearnFeed onNavigate={setTab} uid={user.uid} />
           </section>
         )}
 

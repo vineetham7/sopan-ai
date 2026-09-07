@@ -14,7 +14,7 @@ function shuffle(arr) {
   return a;
 }
 
-export default function PlanQuiz({ questions, onComplete }) {
+export default function PlanQuiz({ questions, onComplete, onAskTutor }) {
   const [index, setIndex] = useState(0);
   const [selected, setSelected] = useState(null);
   const [correctCount, setCorrectCount] = useState(0);
@@ -92,6 +92,18 @@ export default function PlanQuiz({ questions, onComplete }) {
         <div className="quiz-feedback">
           <p className="quiz-verdict">{selected === current.answer ? "Correct." : `Not quite — correct answer: ${current.answer}.`}</p>
           {current.explanation && <p className="quiz-explanation">{current.explanation}</p>}
+          {selected !== current.answer && onAskTutor && (
+            <button
+              className="chat-tutor-btn quiz-ask-tutor"
+              onClick={() => onAskTutor({
+                prompt: current.prompt,
+                answer: current.answer,
+                explanation: current.explanation,
+              })}
+            >
+              🎓 Ask the tutor about this
+            </button>
+          )}
           <button className="btn btn-primary btn-block" onClick={next}>
             {index + 1 < questions.length ? "Next question" : "Finish quiz"}
           </button>

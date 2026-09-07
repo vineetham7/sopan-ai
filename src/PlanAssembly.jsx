@@ -18,6 +18,7 @@ export default function PlanAssembly({ uid }) {
   const [openSteps, setOpenSteps] = useState({});
   const [chatMounted, setChatMounted] = useState({});
   const [chatOpen, setChatOpen] = useState({});
+  const [quizTutorContext, setQuizTutorContext] = useState(null);
   const [error, setError] = useState(null);
   const [saveStatus, setSaveStatus] = useState("idle"); // idle | saving | saved
   const [section, setSection] = useState("steps"); // steps | flashcards | quiz
@@ -60,6 +61,14 @@ export default function PlanAssembly({ uid }) {
 
   function closeChat(stepId) {
     setChatOpen((prev) => ({ ...prev, [stepId]: false }));
+  }
+
+  function askTutorAboutQuestion({ prompt, answer, explanation }) {
+    setQuizTutorContext(
+      `I got this quiz question wrong: "${prompt}" — the correct answer was "${answer}".` +
+      (explanation ? ` Explanation given: ${explanation}` : "")
+    );
+    openChat("quiz");
   }
 
   async function handleSave() {
@@ -168,7 +177,15 @@ export default function PlanAssembly({ uid }) {
 
           {section === "quiz" && (
             <div className="result-panel">
-              <PlanQuiz questions={result.quiz} />
+              <PlanQuiz questions={result.quiz} onAskTutor={askTutorAboutQuestion} />
+              {chatMounted.quiz && (
+                <StepTutorChat
+                  topicTitle="Your missed quiz question"
+                  topicContext={quizTutorContext}
+                  open={!!chatOpen.quiz}
+                  onClose={() => closeChat("quiz")}
+                />
+              )}
             </div>
           )}
 

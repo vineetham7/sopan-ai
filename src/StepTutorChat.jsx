@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { httpsCallable } from "firebase/functions";
 import { functions } from "./firebase";
+import { renderMarkdownLite } from "./markdownLite";
 import "./StepTutorChat.css";
 
 const tutorChat = httpsCallable(functions, "tutorChat");
@@ -84,7 +85,7 @@ export default function StepTutorChat({ topicTitle, topicContext, open, onClose 
           {messages.map((m, i) => (
             <div key={i} className={`tutor-msg ${m.role}`}>
               <span className="tutor-msg-label">{m.role === "ai" ? "Tutor" : "You"}</span>
-              <p>{m.text}</p>
+              {m.role === "ai" ? <div className="tutor-msg-body">{renderMarkdownLite(m.text)}</div> : <p>{m.text}</p>}
             </div>
           ))}
           {status === "loading" && <p className="tutor-status">The tutor is preparing an explanation...</p>}

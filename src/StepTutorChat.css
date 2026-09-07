@@ -137,6 +137,76 @@
   border-bottom-left-radius: 3px;
 }
 
+/* AI replies render through markdownLite — a bubble wrapping several
+   blocks (paragraphs, lists, code) instead of one plain <p>. */
+.tutor-msg-body {
+  background: var(--paper-raised);
+  color: var(--ink);
+  border-radius: 10px;
+  border-bottom-left-radius: 3px;
+  padding: 9px 12px;
+  font-size: 13.5px;
+  line-height: 1.55;
+}
+
+.tutor-msg-body .md-block + .md-block {
+  margin-top: 8px;
+}
+
+.tutor-msg-body p {
+  margin: 0 0 8px;
+  padding: 0;
+  background: none;
+  border-radius: 0;
+}
+
+.tutor-msg-body p:last-child {
+  margin-bottom: 0;
+}
+
+.tutor-msg-body p.md-heading {
+  font-weight: 700;
+}
+
+.tutor-msg-body .md-list {
+  margin: 0 0 8px;
+  padding-left: 18px;
+}
+
+.tutor-msg-body .md-list:last-child {
+  margin-bottom: 0;
+}
+
+.tutor-msg-body .md-list li {
+  margin-bottom: 3px;
+}
+
+.tutor-msg-body .md-inline-code {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 12px;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  padding: 1px 5px;
+}
+
+.tutor-msg-body .md-code-block {
+  background: var(--code-bg, #1b2420);
+  color: var(--code-ink, #eef1e8);
+  border-radius: 8px;
+  padding: 10px 12px;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 12px;
+  line-height: 1.5;
+  overflow-x: auto;
+  margin: 0 0 8px;
+  white-space: pre;
+}
+
+.tutor-msg-body .md-code-block:last-child {
+  margin-bottom: 0;
+}
+
 .tutor-msg.user p {
   background: var(--accent2-tint);
   color: var(--ink);

@@ -98,6 +98,11 @@
   margin: 0 0 10px;
 }
 
+.quiz-ask-tutor {
+  display: block;
+  margin-bottom: 10px;
+}
+
 .plan-quiz.done {
   text-align: center;
   padding: 20px 0;
