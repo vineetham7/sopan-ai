@@ -3,6 +3,7 @@ import { collection, getDocs } from "firebase/firestore";
 import { db } from "./firebase";
 import { questions as authoredQuestions } from "./diagnosticQuestions";
 import { TOPICS } from "./topics";
+import AnswerExplanation from "./AnswerExplanation";
 import "./DiagnosticQuiz.css";
 
 const QUESTIONS_PER_TOPIC = 4;
@@ -194,9 +195,13 @@ export default function Diagnostic({ onComplete }) {
       {selected && (
         <div className="feedback">
           <p className="verdict">{selected === current.answer ? "Correct." : `Not quite — correct answer: ${current.answer}.`}</p>
-          <p className="explanation">
-            {current.explanation || `No explanation provided — this is a real exam question from ${current.source}.`}
-          </p>
+          <AnswerExplanation
+            prompt={current.prompt}
+            options={current.options}
+            answer={current.answer}
+            source={current.source}
+            explanation={current.explanation}
+          />
           <button className="btn btn-primary btn-block" onClick={next}>
             {qIndex + 1 < questionsInTopic ? "Next question" : topicIndex + 1 < totalTopics ? `Next topic: ${run[topicIndex + 1].topic.title}` : "Finish"}
           </button>

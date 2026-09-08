@@ -1,0 +1,126 @@
+.sandbox-modes {
+  display: flex;
+  flex-direction: column-reverse;
+  gap: 18px;
+}
+
+@media (min-width: 860px) {
+  .sandbox-modes {
+    flex-direction: row;
+    align-items: flex-start;
+  }
+  .sandbox-modes-main {
+    flex: 1;
+    min-width: 0;
+  }
+  .sandbox-modes-rail {
+    flex: none;
+    width: 240px;
+  }
+}
+
+.sandbox-mode-head {
+  margin-bottom: 14px;
+}
+
+.sandbox-mode-head h3 {
+  font-size: clamp(18px, 0.8vw + 15px, 22px);
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.sandbox-mode-head p {
+  font-size: 13.5px;
+  color: var(--ink-soft);
+  margin: 0;
+}
+
+.sandbox-rail-label {
+  display: block;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--ink-soft);
+  margin-bottom: 8px;
+}
+
+.sandbox-rail-scroll {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-height: 620px;
+  overflow-y: auto;
+  padding-right: 2px;
+}
+
+@media (max-width: 859px) {
+  .sandbox-rail-scroll {
+    flex-direction: row;
+    max-height: none;
+    overflow-x: auto;
+    overflow-y: visible;
+    padding-bottom: 4px;
+  }
+  .sandbox-rail-card {
+    min-width: 200px;
+    flex: none;
+  }
+}
+
+.sandbox-rail-card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+  text-align: left;
+  background: var(--paper-raised);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 14px;
+  cursor: pointer;
+  box-shadow: var(--shadow);
+  color: var(--accent);
+  transition: transform 0.15s ease, border-color 0.15s ease;
+}
+
+.sandbox-rail-card:hover:not(:disabled) {
+  transform: translateY(-2px);
+  border-color: var(--accent);
+}
+
+.sandbox-rail-card.coming-soon {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.sandbox-rail-name {
+  font-family: "Fraunces", serif;
+  font-weight: 600;
+  font-size: 14.5px;
+  color: var(--ink);
+}
+
+.sandbox-rail-blurb {
+  font-size: 12px;
+  color: var(--ink-soft);
+  line-height: 1.4;
+}
+
+.sandbox-rail-badge {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 9.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--accent-ink);
+  background: var(--accent-tint);
+  padding: 2px 8px;
+  border-radius: 100px;
+  margin-top: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sandbox-rail-card {
+    transition: none;
+  }
+}

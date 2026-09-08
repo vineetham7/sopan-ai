@@ -9,26 +9,37 @@
   text-align: center;
   padding: clamp(40px, 9vw, 76px) 20px clamp(32px, 7vw, 52px);
   border-radius: 22px;
-  background:
-    radial-gradient(ellipse 60% 80% at 50% -10%, var(--accent-tint), transparent),
-    var(--paper-raised);
+  background: var(--paper-raised);
   border: 1px solid var(--line);
   overflow: hidden;
 }
 
+/* One glow, sized relative to the card (not a fixed px circle) so it stays
+   correctly centered and proportional at any card width, and blurred evenly
+   in both themes instead of fighting a second background gradient. */
 .home-hero-orb {
   position: absolute;
   z-index: 0;
-  top: -180px;
+  top: -32%;
   left: 50%;
   transform: translateX(-50%);
-  width: 480px;
-  height: 480px;
+  width: 65%;
+  max-width: 560px;
+  aspect-ratio: 1;
   border-radius: 50%;
   background: radial-gradient(circle, var(--accent) 0%, var(--accent2) 55%, transparent 72%);
-  filter: blur(60px);
-  opacity: 0.55;
+  filter: blur(70px);
+  opacity: 0.45;
   pointer-events: none;
+}
+
+:root[data-theme="dark"] .home-hero-orb {
+  opacity: 0.65;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .home-hero-orb {
+    opacity: 0.65;
+  }
 }
 
 /* Everything else in the hero sits above the glow orb, which paints after

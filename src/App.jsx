@@ -10,7 +10,7 @@ import BugHuntGame from './BugHuntGame'
 import SkillMap from './SkillMap'
 import PlanTracker from './PlanTracker'
 import LearnFeed from './LearnFeed'
-import MLSandbox from './MLSandbox'
+import SandboxModes from './SandboxModes'
 import { applyFullDiagnosticResult } from './applyFullDiagnosticResult'
 import { isDue } from './sm2'
 import WelcomeTour from './WelcomeTour'
@@ -65,6 +65,22 @@ function App() {
   const [dyslexiaFont, setDyslexiaFont] = useState(() => getInitialFlag('sopan-dyslexia'))
   const [colorblind, setColorblind] = useState(() => getInitialFlag('sopan-colorblind'))
   const [showTour, setShowTour] = useState(shouldShowTour)
+  const [tutorOffset, setTutorOffset] = useState(0)
+
+  // The AI Tutor panel docks over the right edge — without this, content
+  // there (e.g. Path's "Your plans" column) sits directly underneath it.
+  // Shift the page left by exactly its current width instead — but only
+  // when the window is wide enough to still have a usable amount of room
+  // left over; below that, pushing the page would wreck the layout worse
+  // than the panel just overlaying it, so leave it overlaying.
+  useEffect(() => {
+    function onTutor(e) {
+      const hasRoom = window.innerWidth - e.detail.width > 640
+      setTutorOffset(e.detail.open && hasRoom ? e.detail.width : 0)
+    }
+    window.addEventListener('sopan:tutor-panel', onTutor)
+    return () => window.removeEventListener('sopan:tutor-panel', onTutor)
+  }, [])
 
   useEffect(() => {
     if (!user) return
@@ -129,7 +145,7 @@ function App() {
   }
 
   return (
-    <div className="app">
+    <div className="app" style={{ marginRight: tutorOffset }}>
       {showTour && <WelcomeTour onDone={() => setShowTour(false)} />}
       {showSignInGate && isAnonymous && (
         <SignInGate
@@ -357,20 +373,22 @@ function App() {
           <section hidden={tab !== 'sandbox'}>
             <div className="panel-head">
               <h2>Live ML Sandbox</h2>
-              <p>Train a real image classifier, entirely in your browser, in seconds.</p>
+              <p>Four ways to train a real model, entirely in your browser.</p>
             </div>
-            <MLSandbox />
+            <SandboxModes />
           </section>
         )}
       </div></main>
 
       <footer className="about-footer">
         <div className="about-footer-inner">
-          <span className="about-footer-brand">
-            <Logo size={18} />
-            Sopan AI
+          <span className="about-footer-id">
+            <span className="about-footer-brand">
+              <Logo size={18} />
+              Sopan AI
+            </span>
+            <span className="about-footer-tagline">Built for Patchamomma 2026 · Vineetha Muppala</span>
           </span>
-          <span className="about-footer-tagline">Built for Patchamomma 2026 · Vineetha Muppala</span>
           <span className="about-footer-links">
             <a
               className="about-footer-icon"

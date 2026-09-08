@@ -49,6 +49,41 @@ export function AccuracyLineChart({ history, epochs }) {
   );
 }
 
+// Same shape as AccuracyLineChart but for a value that isn't naturally
+// bounded 0-1 (loss) — scaled to its own real min/max instead of assuming a
+// fixed range, so the line always uses the full chart height honestly.
+export function LossLineChart({ history, epochs }) {
+  const W = 280;
+  const H = 90;
+  const pad = 6;
+  if (history.length === 0) {
+    return <div className="accuracy-chart empty">Waiting for the first epoch...</div>;
+  }
+  const losses = history.map((h) => h.loss);
+  const min = Math.min(...losses);
+  const max = Math.max(...losses);
+  const range = max - min || 1;
+  const points = history.map((h) => {
+    const x = pad + (h.epoch / epochs) * (W - pad * 2);
+    const y = H - pad - ((h.loss - min) / range) * (H - pad * 2);
+    return [x, y];
+  });
+  const path = points.map((p, i) => `${i === 0 ? "M" : "L"}${p[0].toFixed(1)},${p[1].toFixed(1)}`).join(" ");
+  const last = points[points.length - 1];
+  const lastLoss = losses[losses.length - 1];
+
+  return (
+    <svg className="accuracy-chart" viewBox={`0 0 ${W} ${H}`} preserveAspectRatio="none">
+      <line x1={pad} y1={H - pad} x2={W - pad} y2={H - pad} className="axis-line" />
+      <path d={path} className="accuracy-line" fill="none" strokeLinecap="round" />
+      <circle cx={last[0]} cy={last[1]} r="3.5" className="accuracy-dot" />
+      <text x={Math.min(last[0] + 6, W - 34)} y={last[1] - 6} className="accuracy-label">
+        {lastLoss.toFixed(3)}
+      </text>
+    </svg>
+  );
+}
+
 // A real fully-connected graph, drawn as actual nodes + edges — every line
 // here is a real connection in the trained network, not a decorative dot
 // cluster. While `active` (mid-training), small particles animate along

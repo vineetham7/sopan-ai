@@ -2,6 +2,13 @@
   display: flex;
   flex-direction: column;
   min-height: 100svh;
+  transition: margin-right 0.25s cubic-bezier(0.2, 0.8, 0.3, 1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .app {
+    transition: none;
+  }
 }
 
 /* ---------- Website header (not a phone-app shell) ---------- */
@@ -213,17 +220,17 @@ button.stat-clickable .v {
 .stat-row .stat .v {
   font-family: "IBM Plex Mono", monospace;
   font-variant-numeric: tabular-nums;
-  font-size: 16px;
+  font-size: clamp(18px, 1.1vw + 13px, 26px);
   font-weight: 600;
   color: var(--accent2);
 }
 
 .stat-row .stat .l {
-  font-size: 10px;
+  font-size: clamp(10.5px, 0.15vw + 9.5px, 12.5px);
   text-transform: uppercase;
   letter-spacing: 0.05em;
   color: var(--ink-soft);
-  margin-top: 2px;
+  margin-top: 3px;
 }
 
 /* ---------- Main content ---------- */
@@ -295,7 +302,7 @@ button.stat-clickable .v {
     display: grid;
     grid-template-columns: 1fr 1fr;
     align-items: start;
-    gap: 28px;
+    gap: clamp(28px, 4vw, 64px);
   }
   .two-col .panel-head,
   .two-col .card,
@@ -392,16 +399,24 @@ button.stat-clickable .v {
   padding: clamp(16px, 2.4vw, 22px) 24px;
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
   flex-wrap: wrap;
-  gap: clamp(10px, 2vw, 24px);
+  gap: clamp(16px, 4vw, 40px);
   font-size: clamp(13px, 0.2vw + 12px, 14.5px);
+}
+
+.about-footer-id {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: center;
 }
 
 .about-footer-brand {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
+  gap: 8px;
   font-weight: 700;
   color: var(--ink);
   white-space: nowrap;
@@ -415,7 +430,7 @@ button.stat-clickable .v {
 .about-footer-links {
   display: inline-flex;
   align-items: center;
-  gap: 10px;
+  gap: 16px;
 }
 
 .about-footer-icon {

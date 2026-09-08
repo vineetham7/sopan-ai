@@ -179,13 +179,13 @@
 
 .kanban-title {
   font-weight: 600;
-  font-size: 14.5px;
+  font-size: clamp(14.5px, 0.3vw + 13px, 17px);
   color: var(--ink);
   line-height: 1.35;
 }
 
 .kanban-summary {
-  font-size: 13px;
+  font-size: clamp(13px, 0.25vw + 12px, 15px);
   color: var(--ink-soft);
   margin: 0;
   display: -webkit-box;
@@ -253,14 +253,14 @@
 }
 
 .detail-title {
-  font-size: 17px;
+  font-size: clamp(18px, 0.6vw + 15px, 24px);
   font-weight: 600;
   margin: 4px 0 8px;
   line-height: 1.35;
 }
 
 .one-liner {
-  font-size: 14px;
+  font-size: clamp(14px, 0.3vw + 12.5px, 17px);
   margin-bottom: 8px;
 }
 

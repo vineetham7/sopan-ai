@@ -1,12 +1,13 @@
 .code-block textarea {
   width: 100%;
+  min-height: clamp(90px, 10vw, 160px);
   background: var(--code-bg);
   color: var(--code-ink);
   border: 1px solid var(--code-line);
   border-radius: 8px;
-  padding: 12px;
+  padding: 14px;
   font-family: "IBM Plex Mono", ui-monospace, Menlo, monospace;
-  font-size: 13px;
+  font-size: clamp(13.5px, 0.4vw + 12px, 17px);
   line-height: 1.55;
   resize: vertical;
   margin-bottom: 10px;
@@ -17,9 +18,9 @@
   background: var(--paper);
   border: 1px solid var(--line);
   border-radius: 8px;
-  padding: 10px 12px;
+  padding: 12px 14px;
   font-family: "IBM Plex Mono", ui-monospace, Menlo, monospace;
-  font-size: 13px;
+  font-size: clamp(13px, 0.3vw + 11.5px, 16px);
   min-height: 20px;
   white-space: pre-wrap;
   word-break: break-word;

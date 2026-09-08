@@ -1,3 +1,4 @@
+const crypto = require("crypto");
 const {setGlobalOptions} = require("firebase-functions");
 const {onCall, HttpsError} = require("firebase-functions/v2/https");
 const {defineSecret} = require("firebase-functions/params");
@@ -156,19 +157,26 @@ async function fetchPapers(page) {
 }
 
 // Pulls real, currently-trending AI industry news — launches, funding,
-// acquisitions, company moves — from Hacker News' official Algolia search
-// API (no key needed). This is what actually catches things like an
-// acquisition headline, which a research-paper-only feed never would.
+// acquisitions, company moves, and the viral "everyone's trying this" stuff
+// (a new image-gen trend, a new model release) — from Hacker News' official
+// Algolia search API (no key needed). This is what actually catches things
+// like an acquisition headline, which a research-paper-only feed never
+// would. The query used to be the single word "AI", which — combined with
+// Algolia matching on relevance to ANY query word by default — meant a
+// viral story never surfaced unless its title literally contained "AI".
+// Broadened to the terms an actual trending AI story's title tends to use,
+// and the points bar lowered so more real, honest signal gets through.
 async function fetchIndustryNews(page) {
   try {
     const cutoff = Math.floor(Date.now() / 1000) - 21 * 24 * 3600; // last 3 weeks
+    const query = encodeURIComponent("AI Gemini OpenAI Anthropic image generation model release agent");
     const hnRes = await fetch(
-        `https://hn.algolia.com/api/v1/search?query=AI&tags=story&typoTolerance=false` +
-      `&numericFilters=points%3E30,created_at_i%3E${cutoff}&hitsPerPage=3&page=${page}`,
+        `https://hn.algolia.com/api/v1/search?query=${query}&tags=story&typoTolerance=false` +
+      `&numericFilters=points%3E20,created_at_i%3E${cutoff}&hitsPerPage=3&page=${page}`,
     );
     const hnJson = await hnRes.json();
     return (hnJson.hits || [])
-        .filter((h) => h.title && h.url && h.points > 30)
+        .filter((h) => h.title && h.url && h.points > 20)
         .map((h) => ({
           kind: "news",
           source: "Hacker News",
@@ -395,6 +403,46 @@ exports.generateBugHuntPuzzle = onCall({secrets: [geminiKey]}, async () => {
   } catch {
     throw new HttpsError("internal", "Gemini's response wasn't valid JSON.");
   }
+});
+
+// Real benchmark questions (MMLU/AGIEval) come with no explanation field at
+// all — the fixed fallback text ("no explanation provided") taught nothing.
+// This generates a real one on demand and caches it (keyed by a hash of the
+// question) so the same benchmark question never re-spends Gemini quota
+// once it's been explained for anyone.
+exports.explainAnswer = onCall({secrets: [geminiKey]}, async (request) => {
+  const {prompt, options, answer, source} = request.data;
+  if (!prompt || !answer) {
+    throw new HttpsError("invalid-argument", "prompt and answer are required.");
+  }
+
+  const key = crypto.createHash("sha1").update(`${prompt}::${answer}`).digest("hex");
+  const db = admin.firestore();
+  const ref = db.collection("explanationCache").doc(key);
+  const cached = await ref.get();
+  if (cached.exists) {
+    return {explanation: cached.data().explanation};
+  }
+
+  const ai = new GoogleGenAI({apiKey: geminiKey.value()});
+  let interaction;
+  try {
+    interaction = await ai.interactions.create({
+      model: GEMINI_MODEL,
+      input:
+        `This is a real exam question${source ? ` from ${source}` : ""}:\n"${prompt}"\n` +
+        (options?.length ? `Options: ${options.join(" / ")}\n` : "") +
+        `The correct answer is: "${answer}"\n\n` +
+        "Explain in 2-3 plain-language sentences why this is correct — a learner who got it wrong should " +
+        "understand the reasoning after reading it. No markdown, no restating the question, just the explanation.",
+    });
+  } catch (err) {
+    throw new HttpsError("unavailable", `Couldn't generate an explanation: ${err.message}`);
+  }
+
+  const explanation = interaction.output_text.trim();
+  await ref.set({explanation, cachedAt: Date.now()});
+  return {explanation};
 });
 
 // An interactive AI tutor scoped to one plan step. Unlike assemblePlan (which

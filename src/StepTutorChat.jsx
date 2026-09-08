@@ -30,8 +30,8 @@ export default function StepTutorChat({ topicTitle, topicContext, open, onClose 
   // a plain window event is simpler than wiring shared state through props
   // this component tree doesn't otherwise need.
   useEffect(() => {
-    window.dispatchEvent(new CustomEvent("sopan:tutor-panel", { detail: { open } }));
-  }, [open]);
+    window.dispatchEvent(new CustomEvent("sopan:tutor-panel", { detail: { open, width } }));
+  }, [open, width]);
 
   useEffect(() => {
     function onMove(e) {

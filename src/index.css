@@ -5,8 +5,8 @@
 :root {
   --paper: #f6f6fb;
   --paper-raised: #ffffff;
-  --ink: #14131f;
-  --ink-soft: #52526b;
+  --ink: #100f1a;
+  --ink-soft: #45455c;
   --line: #e4e3f0;
   --accent: #5b4fe0;
   --accent-ink: #443ab3;
@@ -27,7 +27,7 @@
   :root:not([data-theme="light"]) {
     --paper: #0b0e1a;
     --paper-raised: #131829;
-    --ink: #eef0fa;
+    --ink: #f8f8ff;
     --ink-soft: #9ea1c4;
     --line: #232a45;
     --accent: #8b7cf6;
@@ -48,7 +48,7 @@
 :root[data-theme="dark"] {
   --paper: #0b0e1a;
   --paper-raised: #131829;
-  --ink: #eef0fa;
+  --ink: #f8f8ff;
   --ink-soft: #9ea1c4;
   --line: #232a45;
   --accent: #8b7cf6;
@@ -135,6 +135,11 @@ h1, h2, h3 {
   font-family: "Fraunces", Georgia, serif;
   text-wrap: balance;
   margin: 0;
+}
+
+.explanation.muted {
+  font-style: italic;
+  opacity: 0.75;
 }
 
 code, .mono {

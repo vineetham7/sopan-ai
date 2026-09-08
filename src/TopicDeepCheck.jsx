@@ -4,6 +4,7 @@ import { db } from "./firebase";
 import { questions } from "./diagnosticQuestions";
 import { TOPICS } from "./topics";
 import { applyDeepCheckResult } from "./applyDeepCheckResult";
+import AnswerExplanation from "./AnswerExplanation";
 import "./TopicDeepCheck.css";
 
 const QUESTIONS_PER_CHECK = 10;
@@ -147,9 +148,13 @@ export default function TopicDeepCheck({ uid, node, onClose }) {
       {selected && (
         <div className="feedback">
           <p className="verdict">{selected === current.answer ? "Correct." : `Not quite — correct answer: ${current.answer}.`}</p>
-          <p className="explanation">
-            {current.explanation || `No explanation provided — this is a real exam question from ${current.source}.`}
-          </p>
+          <AnswerExplanation
+            prompt={current.prompt}
+            options={current.options}
+            answer={current.answer}
+            source={current.source}
+            explanation={current.explanation}
+          />
           <button className="btn btn-primary btn-block" onClick={next}>
             {index + 1 < bank.length ? "Next question" : "Finish check"}
           </button>
