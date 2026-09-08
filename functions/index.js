@@ -47,8 +47,31 @@ exports.assemblePlan = onCall({secrets: [geminiKey]}, async (request) => {
     queryVector: embeddings[0].values,
     limit: 5,
     distanceMeasure: "COSINE",
+    distanceResultField: "_distance",
   }).get();
   const matched = results.docs.map((d) => d.data());
+
+  // findNearest has no relevance floor — it always returns its 5 least-bad
+  // matches even when nothing in the corpus is actually relevant. Confirmed
+  // live: asking for "Agentic AI" (nothing in the corpus covered agents at
+  // the time this shipped) returned Python/NumPy basics chunks, and the
+  // plan came back titled "Agentic AI ..." anyway, since the title prompt
+  // below is built from the user's goal, not from what was actually
+  // matched — a real, honest-looking plan that wasn't actually about the
+  // topic it claimed. Threshold calibrated against real measured distances,
+  // not guessed: genuinely-covered goals ("Agentic AI" once seeded,
+  // "Python lists") measured 0.21-0.22; genuinely uncovered ones ("bake a
+  // chocolate cake", "quantum computing hardware") measured 0.41-0.47.
+  // 0.32 sits in the real gap between those two clusters.
+  const RELEVANCE_THRESHOLD = 0.32;
+  const bestDistance = matched[0]?._distance;
+  if (bestDistance == null || bestDistance > RELEVANCE_THRESHOLD) {
+    throw new HttpsError(
+        "not-found",
+        "Nothing in the material this app is grounded in actually covers that topic yet — rather than build a " +
+        "plan that would look grounded but isn't, try a different goal or one of the listed topics.",
+    );
+  }
 
   let interaction;
   try {

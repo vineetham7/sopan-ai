@@ -91,8 +91,17 @@ export function LossLineChart({ history, epochs }) {
 // each pass — the same visual language DSA/algorithm visualizers use for
 // "something is flowing along this edge right now."
 export function NetworkDiagram({ active, classNames, embeddingDim = 1024, hiddenUnits = 32 }) {
-  const W = 320, H = 120;
+  const H = 120;
   const layerX = [26, 160, 294];
+  // The output labels are real, user-typed class names (default "Cats"/
+  // "Dogs", but editable to anything) — a fixed 320-wide viewBox only ever
+  // left ~14 units past the label's start position, not enough for most
+  // real text, so "Cats"/"Dogs" rendered clipped. SVG clips at its own
+  // viewBox edge by default, so the fix is sizing the canvas to the actual
+  // label instead of a guessed constant.
+  const labelStartX = layerX[2] + 12;
+  const longestLabel = Math.max(...classNames.map((n) => n.length), 3);
+  const W = labelStartX + longestLabel * 6 + 10;
   const counts = [6, 8, classNames.length];
 
   function nodeYs(count, spread) {

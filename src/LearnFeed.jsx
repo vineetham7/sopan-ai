@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { httpsCallable } from "firebase/functions";
 import { functions } from "./firebase";
 import { toggleBookmark, getBookmarks } from "./bookmarkStore";
+import StepTutorChat from "./StepTutorChat";
 import "./LearnFeed.css";
 
 const getAiFeed = httpsCallable(functions, "getAiFeed");
@@ -100,7 +101,18 @@ export default function LearnFeed({ onNavigate, uid }) {
   const [error, setError] = useState(null);
   const [filter, setFilter] = useState("all"); // all | paper | news | bookmarked
   const [bookmarks, setBookmarks] = useState([]);
+  const [chatMounted, setChatMounted] = useState({});
+  const [chatOpen, setChatOpen] = useState({});
   const loadedOnce = useRef(false);
+
+  function openChat(url) {
+    setChatMounted((prev) => ({ ...prev, [url]: true }));
+    setChatOpen((prev) => ({ ...prev, [url]: true }));
+  }
+
+  function closeChat(url) {
+    setChatOpen((prev) => ({ ...prev, [url]: false }));
+  }
 
   useEffect(() => {
     if (uid) getBookmarks(uid).then(setBookmarks);
@@ -184,6 +196,18 @@ export default function LearnFeed({ onNavigate, uid }) {
               Try it now →
             </button>
           </>
+        )}
+
+        <button className="chat-tutor-btn" onClick={() => openChat(openItem.url)}>
+          💬 Ask the tutor about this
+        </button>
+        {chatMounted[openItem.url] && (
+          <StepTutorChat
+            topicTitle={openItem.title}
+            topicContext={isNews ? openItem.whyItMatters : openItem.oneLiner}
+            open={!!chatOpen[openItem.url]}
+            onClose={() => closeChat(openItem.url)}
+          />
         )}
       </div>
     );

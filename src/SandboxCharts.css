@@ -63,10 +63,12 @@
   border: 1px solid var(--line);
   border-radius: 8px;
   padding: 8px 4px 4px;
+  overflow-x: auto;
 }
 
 .network-diagram-svg svg {
   width: 100%;
+  min-width: 280px;
   height: auto;
   display: block;
 }
