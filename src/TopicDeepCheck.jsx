@@ -104,8 +104,11 @@ export default function TopicDeepCheck({ uid, node, onClose }) {
     <div className="deep-check">
       <div className="deep-check-top-row">
         <p className="meta">
-          Deep check · {node.title} · question {index + 1}/{bank.length} · {correctCount} correct so far
-          {current.source && <span className="source-tag"> · {current.source}</span>}
+          <span className="meta-topic">Deep check · {node.title}</span>
+          <span className="meta-question">
+            Question {index + 1} of {bank.length} · {correctCount} correct so far
+            {current.source && <span className="source-tag"> · {current.source}</span>}
+          </span>
         </p>
         {!confirmingExit ? (
           <button className="end-early-btn" onClick={() => setConfirmingExit(true)}>← Go back</button>
@@ -116,6 +119,11 @@ export default function TopicDeepCheck({ uid, node, onClose }) {
             <button className="end-early-confirm-no" onClick={() => setConfirmingExit(false)}>Keep going</button>
           </span>
         )}
+      </div>
+      <div className="question-stepper" role="list" aria-label="Question progress">
+        {bank.map((_, i) => (
+          <span key={i} role="listitem" className={i < index ? "q-seg done" : i === index ? "q-seg current" : "q-seg"} />
+        ))}
       </div>
       <p className="prompt">{current.prompt}</p>
       <ul className="options">

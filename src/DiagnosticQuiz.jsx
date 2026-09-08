@@ -137,10 +137,23 @@ export default function Diagnostic({ onComplete }) {
 
   return (
     <div className="diagnostic">
+      <div className="topic-stepper" role="list" aria-label="Topic progress">
+        {run.map((r, i) => (
+          <span
+            key={r.topic.id}
+            role="listitem"
+            title={r.topic.title}
+            className={i < topicIndex ? "topic-seg done" : i === topicIndex ? "topic-seg current" : "topic-seg"}
+          />
+        ))}
+      </div>
       <div className="diagnostic-top-row">
         <p className="meta">
-          Topic {topicIndex + 1}/{totalTopics}: {topic.title} · question {qIndex + 1}/{questionsInTopic}
-          {current.source && <span className="source-tag"> · {current.source}</span>}
+          <span className="meta-topic">Topic {topicIndex + 1}/{totalTopics}: {topic.title}</span>
+          <span className="meta-question">
+            Question {qIndex + 1} of {questionsInTopic}
+            {current.source && <span className="source-tag"> · {current.source}</span>}
+          </span>
         </p>
         {!confirmingEnd ? (
           <button className="end-early-btn" onClick={() => setConfirmingEnd(true)}>End test now</button>
@@ -153,6 +166,11 @@ export default function Diagnostic({ onComplete }) {
             <button className="end-early-confirm-no" onClick={() => setConfirmingEnd(false)}>Keep going</button>
           </span>
         )}
+      </div>
+      <div className="question-stepper" role="list" aria-label="Question progress in this topic">
+        {topicQuestions.map((_, i) => (
+          <span key={i} role="listitem" className={i < qIndex ? "q-seg done" : i === qIndex ? "q-seg current" : "q-seg"} />
+        ))}
       </div>
       <p className="prompt">{current.prompt}</p>
       <ul className="options">
