@@ -161,32 +161,52 @@ async function fetchPapers(page) {
 // (a new image-gen trend, a new model release) — from Hacker News' official
 // Algolia search API (no key needed). This is what actually catches things
 // like an acquisition headline, which a research-paper-only feed never
-// would. The query used to be the single word "AI", which — combined with
-// Algolia matching on relevance to ANY query word by default — meant a
-// viral story never surfaced unless its title literally contained "AI".
-// Broadened to the terms an actual trending AI story's title tends to use,
-// and the points bar lowered so more real, honest signal gets through.
+// would.
+//
+// A previous version of this tried a single query of 8 space-separated
+// terms ("AI Gemini OpenAI Anthropic image generation model release
+// agent"), assuming Algolia's multi-word search is OR-like — confirmed
+// live against the real API that it is not: that exact query returned 0
+// hits, and even a 2-word query ("AI Gemini") returned 0, while every
+// single term alone returned real results (e.g. "OpenAI" → 60,
+// "Anthropic" → 34). So a real, major, 2270-point story titled "GPT-6
+// Astra" never surfaced under the single word "AI" either — "Astra"
+// doesn't literally contain "ai", so it ranked outside the top 3 results
+// an "AI" query returns, despite being the single biggest story in the
+// window. Fixed by running several proven single-term queries in
+// parallel and merging by real point count instead of trusting one
+// combined query to do OR-matching it doesn't actually do.
+const INDUSTRY_NEWS_TERMS = ["AI", "OpenAI", "Gemini", "Anthropic", "Astra"];
+
 async function fetchIndustryNews(page) {
   try {
     const cutoff = Math.floor(Date.now() / 1000) - 21 * 24 * 3600; // last 3 weeks
-    const query = encodeURIComponent("AI Gemini OpenAI Anthropic image generation model release agent");
-    const hnRes = await fetch(
-        `https://hn.algolia.com/api/v1/search?query=${query}&tags=story&typoTolerance=false` +
-      `&numericFilters=points%3E20,created_at_i%3E${cutoff}&hitsPerPage=3&page=${page}`,
-    );
-    const hnJson = await hnRes.json();
-    return (hnJson.hits || [])
-        .filter((h) => h.title && h.url && h.points > 20)
-        .map((h) => ({
-          kind: "news",
-          source: "Hacker News",
-          title: h.title,
-          url: h.url,
-          published: h.created_at,
-          points: h.points,
-          comments: h.num_comments ?? 0,
-          discussionUrl: `https://news.ycombinator.com/item?id=${h.objectID}`,
-        }));
+    const perTerm = await Promise.all(INDUSTRY_NEWS_TERMS.map((term) =>
+      fetch(
+          `https://hn.algolia.com/api/v1/search?query=${encodeURIComponent(term)}&tags=story&typoTolerance=false` +
+        `&numericFilters=points%3E20,created_at_i%3E${cutoff}&hitsPerPage=10`,
+      ).then((r) => r.json()).catch(() => ({hits: []})),
+    ));
+
+    const byId = new Map();
+    for (const json of perTerm) {
+      for (const h of json.hits || []) {
+        if (h.title && h.url && h.points > 20) byId.set(h.objectID, h);
+      }
+    }
+    const merged = [...byId.values()].sort((a, b) => b.points - a.points);
+    const pageHits = merged.slice(page * 3, page * 3 + 3);
+
+    return pageHits.map((h) => ({
+      kind: "news",
+      source: "Hacker News",
+      title: h.title,
+      url: h.url,
+      published: h.created_at,
+      points: h.points,
+      comments: h.num_comments ?? 0,
+      discussionUrl: `https://news.ycombinator.com/item?id=${h.objectID}`,
+    }));
   } catch {
     return [];
   }
