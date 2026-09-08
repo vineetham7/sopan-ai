@@ -1,3 +1,14 @@
+/* A slightly tinted band separating "where am I" from the question itself
+   — previously both sat on the same flat white surface with nothing to
+   tell them apart. */
+.progress-strip {
+  background: var(--accent-tint);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 14px 16px 12px;
+  margin: -4px -4px 16px;
+}
+
 .topic-stepper {
   display: flex;
   gap: 4px;

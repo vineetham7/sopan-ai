@@ -24,11 +24,10 @@
 .home-hero-orb-wrap {
   position: absolute;
   z-index: 0;
-  top: -32%;
+  top: -55%;
   left: 50%;
   transform: translateX(-50%);
-  width: 65%;
-  max-width: 560px;
+  width: 115%;
   aspect-ratio: 1;
   pointer-events: none;
 }
@@ -38,8 +37,8 @@
   height: 100%;
   border-radius: 50%;
   background: radial-gradient(circle, var(--accent) 0%, var(--accent2) 55%, transparent 72%);
-  filter: blur(70px);
-  opacity: 0.45;
+  filter: blur(90px);
+  opacity: 0.4;
 }
 
 /* Set on the wrapper, not .home-hero-orb — framer-motion owns that

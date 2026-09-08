@@ -279,12 +279,14 @@ function App() {
 
         {visitedTabs.has('diagnostic') && (
           <section hidden={tab !== 'diagnostic'}>
-            <div className="panel-head">
-              <h2>Where do you stand?</h2>
-              <p>A real 32-question placement test — 4 questions per topic, Python basics to applied LLMs. No early stopping.</p>
-            </div>
-            <div className="card">
-              <Diagnostic onComplete={(results) => applyFullDiagnosticResult(user.uid, results)} />
+            <div className="centered-panel">
+              <div className="panel-head">
+                <h2>Where do you stand?</h2>
+                <p>A real 32-question placement test — 4 questions per topic, Python basics to applied LLMs. No early stopping.</p>
+              </div>
+              <div className="card">
+                <Diagnostic onComplete={(results) => applyFullDiagnosticResult(user.uid, results)} />
+              </div>
             </div>
           </section>
         )}
@@ -352,12 +354,14 @@ function App() {
 
         {visitedTabs.has('plan') && (
           <section hidden={tab !== 'plan'}>
-            <div className="panel-head">
-              <h2>Build a plan</h2>
-              <p>Pick a topic or describe a goal — grounded only in real, cited material. Save it to track in the Path tab.</p>
-            </div>
-            <div className="card">
-              <PlanAssembly uid={user.uid} />
+            <div className="centered-panel">
+              <div className="panel-head">
+                <h2>Build a plan</h2>
+                <p>Pick a topic or describe a goal — grounded only in real, cited material. Save it to track in the Path tab.</p>
+              </div>
+              <div className="card">
+                <PlanAssembly uid={user.uid} />
+              </div>
             </div>
           </section>
         )}

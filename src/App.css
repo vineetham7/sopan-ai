@@ -280,8 +280,18 @@ button.stat-clickable .v {
 }
 
 .panel-head {
-  margin: 0 auto 16px;
+  margin: 0 0 16px;
   max-width: 640px;
+}
+
+/* Centers a heading+card pair as one block — only where the content below
+   really is a single narrow card (Diagnostic, Plan). Applying this
+   globally last round also centered Sandbox's and Insta's headings while
+   the wide content underneath (rail, grid) stayed left-aligned, which
+   read as broken rather than centered. */
+.centered-panel {
+  max-width: 680px;
+  margin: 0 auto;
 }
 
 .panel-head h2 {
@@ -303,8 +313,6 @@ button.stat-clickable .v {
   padding: 20px;
   box-shadow: var(--shadow);
   max-width: 680px;
-  margin-left: auto;
-  margin-right: auto;
 }
 
 .card + .card {

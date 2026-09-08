@@ -103,28 +103,30 @@ export default function TopicDeepCheck({ uid, node, onClose }) {
 
   return (
     <div className="deep-check">
-      <div className="deep-check-top-row">
-        <p className="meta">
-          <span className="meta-topic">Deep check · {node.title}</span>
-          <span className="meta-question">
-            Question {index + 1} of {bank.length} · {correctCount} correct so far
-            {current.source && <span className="source-tag"> · {current.source}</span>}
-          </span>
-        </p>
-        {!confirmingExit ? (
-          <button className="end-early-btn" onClick={() => setConfirmingExit(true)}>← Go back</button>
-        ) : (
-          <span className="end-early-confirm">
-            Leave now? This attempt won't be scored.
-            <button className="end-early-confirm-yes" onClick={onClose}>Yes, leave</button>
-            <button className="end-early-confirm-no" onClick={() => setConfirmingExit(false)}>Keep going</button>
-          </span>
-        )}
-      </div>
-      <div className="question-stepper" role="list" aria-label="Question progress">
-        {bank.map((_, i) => (
-          <span key={i} role="listitem" className={i < index ? "q-seg done" : i === index ? "q-seg current" : "q-seg"} />
-        ))}
+      <div className="progress-strip">
+        <div className="deep-check-top-row">
+          <p className="meta">
+            <span className="meta-topic">Deep check · {node.title}</span>
+            <span className="meta-question">
+              Question {index + 1} of {bank.length} · {correctCount} correct so far
+              {current.source && <span className="source-tag"> · {current.source}</span>}
+            </span>
+          </p>
+          {!confirmingExit ? (
+            <button className="end-early-btn" onClick={() => setConfirmingExit(true)}>← Go back</button>
+          ) : (
+            <span className="end-early-confirm">
+              Leave now? This attempt won't be scored.
+              <button className="end-early-confirm-yes" onClick={onClose}>Yes, leave</button>
+              <button className="end-early-confirm-no" onClick={() => setConfirmingExit(false)}>Keep going</button>
+            </span>
+          )}
+        </div>
+        <div className="question-stepper" role="list" aria-label="Question progress">
+          {bank.map((_, i) => (
+            <span key={i} role="listitem" className={i < index ? "q-seg done" : i === index ? "q-seg current" : "q-seg"} />
+          ))}
+        </div>
       </div>
       <p className="prompt">{current.prompt}</p>
       <ul className="options">
