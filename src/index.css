@@ -6,19 +6,21 @@
   --paper: #f6f6fb;
   --paper-raised: #ffffff;
   --ink: #14131f;
-  --ink-soft: #6b6b80;
+  --ink-soft: #52526b;
   --line: #e4e3f0;
   --accent: #5b4fe0;
   --accent-ink: #443ab3;
   --accent-tint: #ece9fc;
-  --accent2: #0e9188;
-  --accent2-tint: #dcf5f1;
+  --accent2: #0e7490;
+  --accent2-tint: #dff3f9;
   --danger: #c23a2e;
   --danger-tint: #fbe4e0;
   --code-bg: #14131f;
   --code-ink: #eef0fa;
   --code-line: #2b2a40;
   --shadow: 0 1px 2px rgba(20, 19, 31, 0.06), 0 8px 24px -12px rgba(20, 19, 31, 0.16);
+  --glow-shadow: 0 8px 24px -8px rgba(91, 79, 224, 0.35);
+  --page-max: 1240px;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -26,19 +28,20 @@
     --paper: #0b0e1a;
     --paper-raised: #131829;
     --ink: #eef0fa;
-    --ink-soft: #9497b8;
+    --ink-soft: #9ea1c4;
     --line: #232a45;
     --accent: #8b7cf6;
-    --accent-ink: #b6acfa;
-    --accent-tint: #1f1a3d;
-    --accent2: #45e0d5;
-    --accent2-tint: #0f2e2c;
+    --accent-ink: #c3b8fc;
+    --accent-tint: #211a42;
+    --accent2: #22d3ee;
+    --accent2-tint: #0c2e38;
     --danger: #ef6f61;
     --danger-tint: #33201c;
     --code-bg: #070a13;
     --code-ink: #e7ebfa;
     --code-line: #232a45;
     --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 24px -12px rgba(0, 0, 0, 0.5);
+    --glow-shadow: 0 0 32px -4px rgba(139, 124, 246, 0.5);
   }
 }
 
@@ -46,19 +49,20 @@
   --paper: #0b0e1a;
   --paper-raised: #131829;
   --ink: #eef0fa;
-  --ink-soft: #9497b8;
+  --ink-soft: #9ea1c4;
   --line: #232a45;
   --accent: #8b7cf6;
-  --accent-ink: #b6acfa;
-  --accent-tint: #1f1a3d;
-  --accent2: #45e0d5;
-  --accent2-tint: #0f2e2c;
+  --accent-ink: #c3b8fc;
+  --accent-tint: #211a42;
+  --accent2: #22d3ee;
+  --accent2-tint: #0c2e38;
   --danger: #ef6f61;
   --danger-tint: #33201c;
   --code-bg: #070a13;
   --code-ink: #e7ebfa;
   --code-line: #232a45;
   --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 24px -12px rgba(0, 0, 0, 0.5);
+  --glow-shadow: 0 0 32px -4px rgba(139, 124, 246, 0.5);
 }
 
 /* Colorblind-safe mode — swaps the mastered/error signal colors to the
@@ -120,7 +124,9 @@ body {
   background: var(--paper);
   color: var(--ink);
   font-family: "Public Sans", -apple-system, "Segoe UI", sans-serif;
-  font-size: 17px;
+  /* Fluid, not fixed — a 27" monitor gets genuinely bigger text than a
+     laptop, not just more empty margin around the same 17px. */
+  font-size: clamp(16px, 0.18vw + 14.4px, 19px);
   line-height: 1.55;
   -webkit-font-smoothing: antialiased;
 }

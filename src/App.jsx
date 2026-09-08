@@ -143,7 +143,7 @@ function App() {
         <div className="site-header-inner">
           <div className="brand-row">
             <button className="brand-logo-btn" onClick={() => goToTab('home')} aria-label="Go to home">
-              <Logo size={24} />
+              <Logo size={30} />
               <h1>Sopan AI</h1>
             </button>
             <nav className="site-nav">
@@ -281,40 +281,52 @@ function App() {
                 </span>
               </div>
             )}
-            <div className="panel-head">
-              <h2>Your prerequisite map</h2>
-              <p>Status comes from your diagnostic. Tell us how each topic actually feels.</p>
-            </div>
-            <div className="card">
-              <SkillMap uid={user.uid} nodes={skillNodes} />
-            </div>
+            <div className="two-col">
+              <div>
+                <div className="panel-head">
+                  <h2>Your prerequisite map</h2>
+                  <p>Status comes from your diagnostic. Tell us how each topic actually feels.</p>
+                </div>
+                <div className="card">
+                  <SkillMap uid={user.uid} nodes={skillNodes} />
+                </div>
+              </div>
 
-            <div className="panel-head" style={{ marginTop: 24 }}>
-              <h2>Your plans</h2>
-              <p>Saved from the Plan tab — track them here alongside your skill map.</p>
-            </div>
-            <div className="card">
-              <PlanTracker uid={user.uid} />
+              <div>
+                <div className="panel-head">
+                  <h2>Your plans</h2>
+                  <p>Saved from the Plan tab — track them here alongside your skill map.</p>
+                </div>
+                <div className="card">
+                  <PlanTracker uid={user.uid} />
+                </div>
+              </div>
             </div>
           </section>
         )}
 
         {visitedTabs.has('practice') && (
           <section hidden={tab !== 'practice'}>
-            <div className="panel-head">
-              <h2>Run it yourself</h2>
-              <p>Real Python, compiled to WebAssembly, free and in-browser.</p>
-            </div>
-            <div className="card">
-              <CodeBlock starterCode={'print("hello from python")\n1 + 1'} />
-            </div>
+            <div className="two-col">
+              <div>
+                <div className="panel-head">
+                  <h2>Run it yourself</h2>
+                  <p>Real Python, compiled to WebAssembly, free and in-browser.</p>
+                </div>
+                <div className="card">
+                  <CodeBlock starterCode={'print("hello from python")\n1 + 1'} />
+                </div>
+              </div>
 
-            <div className="panel-head" style={{ marginTop: 24 }}>
-              <h2>Spot the bug</h2>
-              <p>Five real, common Python bugs. Fix the code, then run it — a real interpreter checks whether your fix actually works.</p>
-            </div>
-            <div className="card">
-              <BugHuntGame />
+              <div>
+                <div className="panel-head">
+                  <h2>Spot the bug</h2>
+                  <p>Five real, common Python bugs. Fix the code, then run it — a real interpreter checks whether your fix actually works.</p>
+                </div>
+                <div className="card">
+                  <BugHuntGame />
+                </div>
+              </div>
             </div>
           </section>
         )}
@@ -355,7 +367,7 @@ function App() {
       <footer className="about-footer">
         <div className="about-footer-inner">
           <span className="about-footer-brand">
-            <Logo size={16} />
+            <Logo size={18} />
             Sopan AI
           </span>
           <span className="about-footer-tagline">Built for Patchamomma 2026 · Vineetha Muppala</span>

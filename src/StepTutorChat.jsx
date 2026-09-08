@@ -88,9 +88,12 @@ export default function StepTutorChat({ topicTitle, topicContext, open, onClose 
     bottomRef.current?.scrollIntoView({ behavior: "smooth", block: "end" });
   }, [messages, status]);
 
-  async function ask(text, { listMode = false } = {}) {
+  async function ask(text, { listMode = false, backendMessage = text } = {}) {
     if (status === "sending") return;
-    if (!listMode) setMessages((prev) => [...prev, { role: "user", text }]);
+    // Always show what triggered the reply — a quick-action button used to
+    // send a silent null message, leaving no record in the log of what was
+    // actually asked when the answer came back.
+    setMessages((prev) => [...prev, { role: "user", text }]);
     setInput("");
     setStatus("sending");
     try {
@@ -98,7 +101,7 @@ export default function StepTutorChat({ topicTitle, topicContext, open, onClose 
         topicTitle,
         topicContext,
         previousInteractionId: interactionId.current,
-        message: text,
+        message: backendMessage,
         listMode,
       });
       interactionId.current = res.data.interactionId;
@@ -164,7 +167,10 @@ export default function StepTutorChat({ topicTitle, topicContext, open, onClose 
         </div>
 
         <div className="tutor-quick-actions">
-          <button onClick={() => ask(null, { listMode: true })} disabled={status === "loading" || status === "sending"}>
+          <button
+            onClick={() => ask("List the key subtopics.", { listMode: true, backendMessage: null })}
+            disabled={status === "loading" || status === "sending"}
+          >
             📋 List key subtopics
           </button>
           <button onClick={() => ask("Give me a concrete real-world example of this in production.")} disabled={status === "loading" || status === "sending"}>

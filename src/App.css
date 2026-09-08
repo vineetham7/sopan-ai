@@ -14,9 +14,9 @@
 }
 
 .site-header-inner {
-  max-width: 1100px;
+  max-width: var(--page-max);
   margin: 0 auto;
-  padding: 16px 24px 14px;
+  padding: 18px 24px 16px;
 }
 
 .brand-row {
@@ -40,7 +40,7 @@
 }
 
 .brand-row h1 {
-  font-size: clamp(20px, 4.5vw, 25px);
+  font-size: clamp(22px, 1.4vw + 18px, 30px);
   font-weight: 600;
   flex: none;
 }
@@ -56,10 +56,10 @@
   background: none;
   border: none;
   font-family: "Public Sans", sans-serif;
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 500;
   color: var(--ink-soft);
-  padding: 8px 12px;
+  padding: 9px 14px;
   border-radius: 8px;
   cursor: pointer;
   white-space: nowrap;
@@ -154,16 +154,21 @@
   justify-content: center;
   background: var(--paper-raised);
   border: 1px solid var(--line);
-  border-radius: 8px;
-  width: 32px;
-  height: 32px;
-  font-size: 13px;
+  border-radius: 9px;
+  width: 38px;
+  height: 38px;
+  font-size: 15px;
   font-weight: 600;
   line-height: 1;
   cursor: pointer;
   color: var(--ink);
   text-decoration: none;
   box-sizing: border-box;
+}
+
+.toolbar-btn svg {
+  width: 18px;
+  height: 18px;
 }
 
 .toolbar-btn.active {
@@ -174,19 +179,19 @@
 
 .stat-row {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 220px));
+  grid-template-columns: repeat(3, 1fr);
   gap: 1px;
   background: var(--line);
   border: 1px solid var(--line);
   border-radius: 10px;
   overflow: hidden;
   margin-top: 12px;
-  width: fit-content;
+  width: 100%;
 }
 
 .stat-row .stat {
   background: var(--paper-raised);
-  padding: 8px 16px;
+  padding: 14px 16px;
   text-align: center;
 }
 
@@ -227,7 +232,7 @@ button.stat-clickable .v {
 }
 
 .site-main-inner {
-  max-width: 1100px;
+  max-width: var(--page-max);
   margin: 0 auto;
   padding: 28px 24px 64px;
 }
@@ -257,13 +262,13 @@ button.stat-clickable .v {
 }
 
 .panel-head h2 {
-  font-size: clamp(20px, 5vw, 26px);
+  font-size: clamp(21px, 1vw + 18px, 29px);
   font-weight: 600;
   margin-bottom: 4px;
 }
 
 .panel-head p {
-  font-size: clamp(14px, 3.2vw, 16px);
+  font-size: clamp(14px, 0.3vw + 13px, 17px);
   color: var(--ink-soft);
   margin: 0;
 }
@@ -279,6 +284,24 @@ button.stat-clickable .v {
 
 .card + .card {
   margin-top: 12px;
+}
+
+/* Two independent blocks side by side once there's genuinely room for it —
+   Path (prerequisite map / your plans) and Practice (run it yourself / spot
+   the bug) both used to stack single-column no matter how wide the window
+   was, leaving the whole right half of a desktop screen empty. */
+@media (min-width: 980px) {
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: start;
+    gap: 28px;
+  }
+  .two-col .panel-head,
+  .two-col .card,
+  .two-col .due-banner {
+    max-width: none;
+  }
 }
 
 .btn {
@@ -310,6 +333,19 @@ button.stat-clickable .v {
   width: 100%;
 }
 
+/* Nav wrapping badly (two half-empty rows of tab labels fighting the
+   toolbar for space) starts well before the phone breakpoint — drop it to
+   its own full-width row much earlier instead of letting it wrap mid-flex. */
+@media (max-width: 1050px) {
+  .site-nav {
+    order: 3;
+    flex: 1 1 100%;
+    width: 100%;
+    gap: 2px;
+    margin-top: 2px;
+  }
+}
+
 @media (max-width: 640px) {
   .site-header-inner {
     padding: 14px 16px 12px;
@@ -321,14 +357,11 @@ button.stat-clickable .v {
     gap: 12px;
   }
   .site-nav {
-    order: 3;
-    flex: 1 1 100%;
-    width: 100%;
     gap: 0;
   }
   .site-nav button {
     padding: 6px 8px;
-    font-size: 12.5px;
+    font-size: 13px;
   }
   .stat-row {
     grid-template-columns: repeat(3, 1fr);
@@ -354,15 +387,15 @@ button.stat-clickable .v {
 }
 
 .about-footer-inner {
-  max-width: 1100px;
+  max-width: var(--page-max);
   margin: 0 auto;
-  padding: clamp(10px, 2vw, 14px) clamp(16px, 4vw, 24px);
+  padding: clamp(16px, 2.4vw, 22px) 24px;
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
   flex-wrap: wrap;
-  gap: clamp(8px, 2vw, 20px);
-  font-size: clamp(11.5px, 2.4vw, 12.5px);
+  gap: clamp(10px, 2vw, 24px);
+  font-size: clamp(13px, 0.2vw + 12px, 14.5px);
 }
 
 .about-footer-brand {
@@ -389,10 +422,15 @@ button.stat-clickable .v {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 26px;
-  height: 26px;
-  border-radius: 7px;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
   color: var(--ink-soft);
+}
+
+.about-footer-icon svg {
+  width: 17px;
+  height: 17px;
 }
 
 .about-footer-icon:hover {

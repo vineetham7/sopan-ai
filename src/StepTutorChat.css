@@ -291,7 +291,7 @@
 .tutor-chat-input {
   display: flex;
   gap: 8px;
-  padding: 12px 14px;
+  padding: 14px;
   border-top: 1px solid var(--line);
   background: var(--paper-raised);
 }
@@ -301,15 +301,15 @@
   min-width: 0;
   background: var(--paper);
   border: 1px solid var(--line);
-  border-radius: 8px;
-  padding: 9px 11px;
-  font-size: 13px;
+  border-radius: 10px;
+  padding: 14px 14px;
+  font-size: 14.5px;
   color: var(--ink);
 }
 
 .tutor-chat-input .btn {
-  padding: 9px 18px;
-  font-size: 13px;
+  padding: 0 20px;
+  font-size: 14px;
 }
 
 @media (max-width: 560px) {

@@ -7,13 +7,39 @@
 .home-hero {
   position: relative;
   text-align: center;
-  padding: clamp(36px, 8vw, 64px) 20px clamp(28px, 6vw, 44px);
-  border-radius: 20px;
+  padding: clamp(40px, 9vw, 76px) 20px clamp(32px, 7vw, 52px);
+  border-radius: 22px;
   background:
     radial-gradient(ellipse 60% 80% at 50% -10%, var(--accent-tint), transparent),
     var(--paper-raised);
   border: 1px solid var(--line);
   overflow: hidden;
+}
+
+.home-hero-orb {
+  position: absolute;
+  z-index: 0;
+  top: -180px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 480px;
+  height: 480px;
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--accent) 0%, var(--accent2) 55%, transparent 72%);
+  filter: blur(60px);
+  opacity: 0.55;
+  pointer-events: none;
+}
+
+/* Everything else in the hero sits above the glow orb, which paints after
+   in-flow siblings once it's positioned — without this it would cover them. */
+.home-hero-mark,
+.home-hero-eyebrow,
+.home-hero-title,
+.home-hero-sub,
+.home-cta {
+  position: relative;
+  z-index: 1;
 }
 
 .home-hero-mark {
@@ -97,11 +123,23 @@
   border-color: var(--accent);
 }
 
+.home-card-icon {
+  color: var(--accent);
+  margin-bottom: 2px;
+}
+
 .home-card-tab {
   font-family: "Fraunces", serif;
   font-weight: 600;
-  font-size: 16px;
+  font-size: 17px;
   color: var(--ink);
+}
+
+.home-card-highlight {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 11px;
+  color: var(--accent2);
+  margin-top: -4px;
 }
 
 .home-card-intro {
