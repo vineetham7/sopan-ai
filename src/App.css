@@ -323,6 +323,15 @@ button.stat-clickable .v {
    Path (prerequisite map / your plans) and Practice (run it yourself / spot
    the bug) both used to stack single-column no matter how wide the window
    was, leaving the whole right half of a desktop screen empty. */
+/* Below 980px this stacks as plain blocks with no gap at all — Practice's
+   "Spot the bug" panel-head sat flush against the card above it with
+   nothing separating the two sections. */
+.two-col {
+  display: flex;
+  flex-direction: column;
+  gap: 36px;
+}
+
 @media (min-width: 980px) {
   .two-col {
     display: grid;
