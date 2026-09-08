@@ -29,10 +29,19 @@
   margin-bottom: 4px;
 }
 
-.sandbox-mode-head p {
+.sandbox-mode-howto {
   font-size: 13.5px;
-  color: var(--ink-soft);
+  color: var(--ink);
+  background: var(--accent2-tint);
+  border: 1px solid var(--accent2);
+  border-radius: 8px;
+  padding: 10px 12px;
+  line-height: 1.5;
   margin: 0;
+}
+
+.sandbox-mode-howto strong {
+  color: var(--accent2);
 }
 
 .sandbox-rail-label {

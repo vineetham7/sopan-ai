@@ -9,7 +9,7 @@ const MODES = [
     id: "classifier",
     name: "Image Classifier",
     blurb: "Train a real image classifier on your own photos.",
-    running: "Training a small classifier on top of MobileNet's real 1,024-number embeddings.",
+    howTo: "Upload at least 2 photos each of two things (default: cats and dogs) below, then train — the model learns to tell them apart from real MobileNet embeddings.",
     icon: <path d="M4 4h16v16H4zM4 15l4-4 4 4 4-6 4 3" />,
     Component: MLSandbox,
     ready: true,
@@ -18,7 +18,7 @@ const MODES = [
     id: "predictor",
     name: "Number Predictor",
     blurb: "Real linear regression on (x, y) pairs you type in.",
-    running: "A single-neuron linear regression, trained live on your points.",
+    howTo: "Type real number pairs below — e.g. hours studied → score — using \"+ Add point\". Add at least 3, hit train, then type a new x to see what the model predicts for y.",
     icon: <path d="M3 21 21 3M4 17l4 4M14 4l6 6" />,
     Component: NumberPredictor,
     ready: true,
@@ -27,7 +27,7 @@ const MODES = [
     id: "boundary",
     name: "Decision Boundary",
     blurb: "Click to place points, watch the real boundary form.",
-    running: "A small 2-layer classifier, re-evaluated across a real grid every training run.",
+    howTo: "Pick a class below (Red or Blue), then click the board to drop points of that class. Switch classes and add more — at least 3 per class — then train to watch the model draw a real boundary between them.",
     icon: <path d="M12 3v18M3 12h18M6 6l12 12M18 6 6 18" />,
     Component: DecisionBoundaryPlayground,
     ready: true,
@@ -63,7 +63,7 @@ export default function SandboxModes() {
       <div className="sandbox-modes-main">
         <div className="sandbox-mode-head">
           <h3>{active.name}</h3>
-          <p>{active.running}</p>
+          <p className="sandbox-mode-howto"><strong>How to use this:</strong> {active.howTo}</p>
         </div>
         {Active ? <Active /> : <div className="card"><p className="state-msg">Not built yet — vote for it and check back.</p></div>}
       </div>
