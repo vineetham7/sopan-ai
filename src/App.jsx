@@ -17,6 +17,7 @@ import WelcomeTour from './WelcomeTour'
 import Logo from './Logo'
 import Home from './Home'
 import SignInGate from './SignInGate'
+import NotesPanel from './NotesPanel'
 import './App.css'
 
 function shouldShowTour() {
@@ -50,6 +51,7 @@ function App() {
   const { user, loading: authLoading, isAnonymous, upgradeWithGoogle, upgradeError } = useAuth()
   const [tab, setTab] = useState('home')
   const [showSignInGate, setShowSignInGate] = useState(true)
+  const [notesOpen, setNotesOpen] = useState(false)
   const [skillNodes, setSkillNodes] = useState([])
   const [theme, setTheme] = useState(getInitialTheme)
   const [dyslexiaFont, setDyslexiaFont] = useState(() => getInitialFlag('sopan-dyslexia'))
@@ -105,6 +107,7 @@ function App() {
           error={upgradeError}
         />
       )}
+      <NotesPanel uid={user.uid} open={notesOpen} onClose={() => setNotesOpen(false)} />
       <header className="site-header">
         <div className="site-header-inner">
           <div className="brand-row">
@@ -142,6 +145,17 @@ function App() {
                   title="Colorblind-safe colors"
                 >
                   ◐
+                </button>
+                <button
+                  className={notesOpen ? 'toolbar-btn active' : 'toolbar-btn'}
+                  onClick={() => setNotesOpen(!notesOpen)}
+                  aria-pressed={notesOpen}
+                  aria-label="Toggle notes panel"
+                  title="My Notes"
+                >
+                  <svg viewBox="0 0 16 16" width="15" height="15" fill="currentColor" aria-hidden="true">
+                    <path d="M3 1.5A1.5 1.5 0 0 0 1.5 3v10A1.5 1.5 0 0 0 3 14.5h7.5a.5.5 0 0 0 .35-.15l3.5-3.5a.5.5 0 0 0 .15-.35V3A1.5 1.5 0 0 0 13 1.5H3Zm7 11.9V11a.5.5 0 0 1 .5-.5h2.4L10 13.4ZM3 2.5h10a.5.5 0 0 1 .5.5v7h-3A1.5 1.5 0 0 0 9 11.5v3H3a.5.5 0 0 1-.5-.5V3a.5.5 0 0 1 .5-.5Zm1 3a.5.5 0 0 0 0 1h6a.5.5 0 0 0 0-1H4Zm0 2.5a.5.5 0 0 0 0 1h4a.5.5 0 0 0 0-1H4Z" />
+                  </svg>
                 </button>
                 <button
                   className="toolbar-btn"

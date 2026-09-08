@@ -17,7 +17,6 @@
   top: 0;
   right: 0;
   bottom: 0;
-  width: 400px;
   max-width: 92vw;
   background: var(--paper);
   border-left: 1px solid var(--line);
@@ -27,6 +26,42 @@
   flex-direction: column;
   overflow: hidden;
   animation: tutor-panel-in 0.25s cubic-bezier(0.2, 0.8, 0.3, 1) both;
+}
+
+.tutor-resize-handle {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: -4px;
+  width: 8px;
+  cursor: ew-resize;
+  z-index: 1;
+}
+
+.tutor-resize-handle:hover,
+.tutor-resize-handle:active {
+  background: var(--accent);
+  opacity: 0.4;
+}
+
+.tutor-head-actions {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex: none;
+}
+
+.tutor-expand {
+  background: none;
+  border: none;
+  font-size: 16px;
+  color: var(--ink-soft);
+  cursor: pointer;
+  padding: 2px 6px;
+}
+
+.tutor-expand:hover {
+  color: var(--ink);
 }
 
 @keyframes tutor-panel-in {

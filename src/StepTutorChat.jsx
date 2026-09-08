@@ -7,14 +7,66 @@ import "./StepTutorChat.css";
 
 const tutorChat = httpsCallable(functions, "tutorChat");
 
+const MIN_WIDTH = 360;
+const MAX_WIDTH = 900;
+const WIDE_WIDTH = 720;
+
 export default function StepTutorChat({ topicTitle, topicContext, open, onClose }) {
   const [messages, setMessages] = useState([]); // {role: 'user'|'ai', text}
   const [input, setInput] = useState("");
   const [status, setStatus] = useState("loading"); // loading | idle | sending | error
   const [error, setError] = useState(null);
+  const [width, setWidth] = useState(() => {
+    const saved = Number(localStorage.getItem("sopan-tutor-width"));
+    return saved >= MIN_WIDTH && saved <= MAX_WIDTH ? saved : 400;
+  });
   const interactionId = useRef(null);
   const bottomRef = useRef(null);
   const opened = useRef(false);
+  const dragState = useRef(null);
+
+  // Lets NotesPanel (a sibling docked to the same right edge, in a different
+  // part of the tree) collapse itself while this is open and restore after —
+  // a plain window event is simpler than wiring shared state through props
+  // this component tree doesn't otherwise need.
+  useEffect(() => {
+    window.dispatchEvent(new CustomEvent("sopan:tutor-panel", { detail: { open } }));
+  }, [open]);
+
+  useEffect(() => {
+    function onMove(e) {
+      if (!dragState.current) return;
+      const delta = dragState.current.startX - e.clientX;
+      const next = Math.min(MAX_WIDTH, Math.max(MIN_WIDTH, dragState.current.startWidth + delta));
+      setWidth(next);
+    }
+    function onUp() {
+      if (!dragState.current) return;
+      dragState.current = null;
+      setWidth((w) => {
+        localStorage.setItem("sopan-tutor-width", String(w));
+        return w;
+      });
+    }
+    window.addEventListener("mousemove", onMove);
+    window.addEventListener("mouseup", onUp);
+    return () => {
+      window.removeEventListener("mousemove", onMove);
+      window.removeEventListener("mouseup", onUp);
+    };
+  }, []);
+
+  function startDrag(e) {
+    dragState.current = { startX: e.clientX, startWidth: width };
+  }
+
+  function toggleWide() {
+    setWidth((w) => {
+      const next = w >= WIDE_WIDTH ? 400 : WIDE_WIDTH;
+      localStorage.setItem("sopan-tutor-width", String(next));
+      return next;
+    });
+  }
 
   useEffect(() => {
     if (opened.current) return;
@@ -72,13 +124,30 @@ export default function StepTutorChat({ topicTitle, topicContext, open, onClose 
 
   return createPortal(
     <div className="tutor-modal-overlay">
-      <div className="tutor-modal">
+      <div className="tutor-modal" style={{ width }}>
+        <div
+          className="tutor-resize-handle"
+          onMouseDown={startDrag}
+          role="separator"
+          aria-orientation="vertical"
+          aria-label="Resize chat panel"
+        />
         <div className="tutor-modal-head">
           <div>
             <span className="tutor-modal-eyebrow">AI Tutor</span>
             <h4>{topicTitle}</h4>
           </div>
-          <button className="tutor-close" onClick={onClose} aria-label="Close chat">✕</button>
+          <div className="tutor-head-actions">
+            <button
+              className="tutor-expand"
+              onClick={toggleWide}
+              aria-label={width >= WIDE_WIDTH ? "Shrink chat panel" : "Widen chat panel"}
+              title={width >= WIDE_WIDTH ? "Shrink" : "Widen"}
+            >
+              {width >= WIDE_WIDTH ? "⤡" : "⤢"}
+            </button>
+            <button className="tutor-close" onClick={onClose} aria-label="Close chat">✕</button>
+          </div>
         </div>
 
         <div className="tutor-chat-log">
