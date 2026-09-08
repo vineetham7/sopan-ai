@@ -1,112 +1,64 @@
+/* Nova — built from real reference UI (AI Study Tutor App, Datacore,
+   NovaHub — see the design artifact), not invented from scratch. Indigo
+   works cleanly in both light and dark; cyan carries the "correct/success"
+   signal in both. */
 :root {
-  --paper: #f3f4ee;
-  --paper-raised: #ebece3;
-  --ink: #1b2420;
-  --ink-soft: #4d564f;
-  --line: #d9d5c6;
-  --accent: #a06a1f;
-  --accent-ink: #6e4914;
-  --accent-tint: #efe3cd;
-  --accent2: #1e6b5c;
-  --accent2-tint: #dfeae5;
-  --danger: #9a3324;
-  --danger-tint: #f5e2dc;
-  --code-bg: #1b2420;
-  --code-ink: #eef1e8;
-  --code-line: #34413a;
-  --shadow: 0 1px 2px rgba(27, 36, 32, 0.06), 0 8px 24px -12px rgba(27, 36, 32, 0.18);
+  --paper: #f6f6fb;
+  --paper-raised: #ffffff;
+  --ink: #14131f;
+  --ink-soft: #6b6b80;
+  --line: #e4e3f0;
+  --accent: #5b4fe0;
+  --accent-ink: #443ab3;
+  --accent-tint: #ece9fc;
+  --accent2: #0e9188;
+  --accent2-tint: #dcf5f1;
+  --danger: #c23a2e;
+  --danger-tint: #fbe4e0;
+  --code-bg: #14131f;
+  --code-ink: #eef0fa;
+  --code-line: #2b2a40;
+  --shadow: 0 1px 2px rgba(20, 19, 31, 0.06), 0 8px 24px -12px rgba(20, 19, 31, 0.16);
 }
 
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --paper: #141b18;
-    --paper-raised: #1a2320;
-    --ink: #eef1e8;
-    --ink-soft: #a8b3aa;
-    --line: #2c362f;
-    --accent: #fbbf6b;
-    --accent-ink: #ffd98a;
-    --accent-tint: #2c2413;
-    --accent2: #5eead4;
-    --accent2-tint: #172b26;
-    --danger: #e0806c;
-    --danger-tint: #2e1c17;
-    --code-bg: #0e1512;
-    --code-ink: #e7ebe1;
-    --code-line: #2c362f;
+    --paper: #0b0e1a;
+    --paper-raised: #131829;
+    --ink: #eef0fa;
+    --ink-soft: #9497b8;
+    --line: #232a45;
+    --accent: #8b7cf6;
+    --accent-ink: #b6acfa;
+    --accent-tint: #1f1a3d;
+    --accent2: #45e0d5;
+    --accent2-tint: #0f2e2c;
+    --danger: #ef6f61;
+    --danger-tint: #33201c;
+    --code-bg: #070a13;
+    --code-ink: #e7ebfa;
+    --code-line: #232a45;
     --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 24px -12px rgba(0, 0, 0, 0.5);
   }
 }
 
 :root[data-theme="dark"] {
-  --paper: #141b18;
-  --paper-raised: #1a2320;
-  --ink: #eef1e8;
-  --ink-soft: #a8b3aa;
-  --line: #2c362f;
-  --accent: #fbbf6b;
-  --accent-ink: #ffd98a;
-  --accent-tint: #2c2413;
-  --accent2: #5eead4;
-  --accent2-tint: #172b26;
-  --danger: #e0806c;
-  --danger-tint: #2e1c17;
-  --code-bg: #0e1512;
-  --code-ink: #e7ebe1;
-  --code-line: #2c362f;
+  --paper: #0b0e1a;
+  --paper-raised: #131829;
+  --ink: #eef0fa;
+  --ink-soft: #9497b8;
+  --line: #232a45;
+  --accent: #8b7cf6;
+  --accent-ink: #b6acfa;
+  --accent-tint: #1f1a3d;
+  --accent2: #45e0d5;
+  --accent2-tint: #0f2e2c;
+  --danger: #ef6f61;
+  --danger-tint: #33201c;
+  --code-bg: #070a13;
+  --code-ink: #e7ebfa;
+  --code-line: #232a45;
   --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 24px -12px rgba(0, 0, 0, 0.5);
-}
-
-/* Accent color options — the base warm gold/teal palette is the default
-   ("warm"); these swap only the two accent hues, never the paper/ink base,
-   so contrast and readability stay identical to the palette already tuned
-   for both light and dark. */
-:root[data-accent="ocean"] {
-  --accent: #1d5c8a;
-  --accent-ink: #123f5e;
-  --accent-tint: #dce9f3;
-  --accent2: #0e7c86;
-  --accent2-tint: #d9eef0;
-}
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"])[data-accent="ocean"] {
-    --accent: #7dd3fc;
-    --accent-ink: #bae6fd;
-    --accent-tint: #16283a;
-    --accent2: #22d3ee;
-    --accent2-tint: #123236;
-  }
-}
-:root[data-theme="dark"][data-accent="ocean"] {
-  --accent: #7dd3fc;
-  --accent-ink: #bae6fd;
-  --accent-tint: #16283a;
-  --accent2: #22d3ee;
-  --accent2-tint: #123236;
-}
-
-:root[data-accent="berry"] {
-  --accent: #8a3d6e;
-  --accent-ink: #5e2649;
-  --accent-tint: #f3dcec;
-  --accent2: #6b4fa0;
-  --accent2-tint: #e8e0f5;
-}
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"])[data-accent="berry"] {
-    --accent: #f472b6;
-    --accent-ink: #fbcfe8;
-    --accent-tint: #3a1830;
-    --accent2: #c084fc;
-    --accent2-tint: #2a2140;
-  }
-}
-:root[data-theme="dark"][data-accent="berry"] {
-  --accent: #f472b6;
-  --accent-ink: #fbcfe8;
-  --accent-tint: #3a1830;
-  --accent2: #c084fc;
-  --accent2-tint: #2a2140;
 }
 
 /* Colorblind-safe mode — swaps the mastered/error signal colors to the
