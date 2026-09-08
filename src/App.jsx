@@ -37,6 +37,13 @@ const TABS = [
   { id: 'sandbox', label: 'Sandbox' },
 ]
 
+const VALID_TABS = ['home', ...TABS.map((t) => t.id)]
+
+function getInitialTab() {
+  const h = window.location.hash.slice(1)
+  return VALID_TABS.includes(h) ? h : 'home'
+}
+
 function getInitialTheme() {
   const saved = localStorage.getItem('sopan-theme')
   if (saved === 'light' || saved === 'dark') return saved
@@ -49,7 +56,8 @@ function getInitialFlag(key) {
 
 function App() {
   const { user, loading: authLoading, isAnonymous, upgradeWithGoogle, upgradeError } = useAuth()
-  const [tab, setTab] = useState('home')
+  const [tab, setTab] = useState(getInitialTab)
+  const [visitedTabs, setVisitedTabs] = useState(() => new Set([getInitialTab()]))
   const [showSignInGate, setShowSignInGate] = useState(true)
   const [notesOpen, setNotesOpen] = useState(false)
   const [skillNodes, setSkillNodes] = useState([])
@@ -84,6 +92,29 @@ function App() {
     localStorage.setItem('sopan-colorblind', String(colorblind))
   }, [colorblind])
 
+  // Every tab section stays mounted once first visited (see visitedTabs
+  // below), so the browser Back/Forward buttons need their own signal for
+  // which one should be showing — plain useState alone never touches the
+  // URL, so Back previously looked like it "reset to home" instead of
+  // restoring the tab you came from.
+  useEffect(() => {
+    window.history.replaceState({ tab }, '', `#${tab}`)
+    function onPopState(e) {
+      const id = e.state?.tab || 'home'
+      setVisitedTabs((prev) => (prev.has(id) ? prev : new Set(prev).add(id)))
+      setTab(id)
+    }
+    window.addEventListener('popstate', onPopState)
+    return () => window.removeEventListener('popstate', onPopState)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  function goToTab(id) {
+    setVisitedTabs((prev) => (prev.has(id) ? prev : new Set(prev).add(id)))
+    if (tab !== id) window.history.pushState({ tab: id }, '', `#${id}`)
+    setTab(id)
+  }
+
   const mastered = skillNodes.filter((n) => n.status === 'mastered').length
   const total = skillNodes.length
   const masteryPct = total > 0 ? Math.round((mastered / total) * 100) : 0
@@ -111,7 +142,7 @@ function App() {
       <header className="site-header">
         <div className="site-header-inner">
           <div className="brand-row">
-            <button className="brand-logo-btn" onClick={() => setTab('home')} aria-label="Go to home">
+            <button className="brand-logo-btn" onClick={() => goToTab('home')} aria-label="Go to home">
               <Logo size={24} />
               <h1>Sopan AI</h1>
             </button>
@@ -120,7 +151,7 @@ function App() {
                 <button
                   key={t.id}
                   className={tab === t.id ? 'active' : ''}
-                  onClick={() => setTab(t.id)}
+                  onClick={() => goToTab(t.id)}
                 >
                   {t.label}
                 </button>
@@ -217,10 +248,18 @@ function App() {
       </header>
 
       <main className="site-main"><div className="site-main-inner">
-        {tab === 'home' && <Home onNavigate={setTab} />}
+        {/* Every section, once first visited, stays mounted (hidden via the
+            `hidden` attribute rather than unmounted) so switching tabs never
+            loses in-progress state — a running quiz, Insta's loaded feed and
+            open article, Sandbox training, an open tutor chat. */}
+        {visitedTabs.has('home') && (
+          <section hidden={tab !== 'home'}>
+            <Home onNavigate={goToTab} />
+          </section>
+        )}
 
-        {tab === 'diagnostic' && (
-          <section>
+        {visitedTabs.has('diagnostic') && (
+          <section hidden={tab !== 'diagnostic'}>
             <div className="panel-head">
               <h2>Where do you stand?</h2>
               <p>A real 32-question placement test — 4 questions per topic, Python basics to applied LLMs. No early stopping.</p>
@@ -231,8 +270,8 @@ function App() {
           </section>
         )}
 
-        {tab === 'path' && (
-          <section>
+        {visitedTabs.has('path') && (
+          <section hidden={tab !== 'path'}>
             {dueNodes.length > 0 && (
               <div className="due-banner">
                 <span className="due-banner-icon">⏰</span>
@@ -260,8 +299,8 @@ function App() {
           </section>
         )}
 
-        {tab === 'practice' && (
-          <section>
+        {visitedTabs.has('practice') && (
+          <section hidden={tab !== 'practice'}>
             <div className="panel-head">
               <h2>Run it yourself</h2>
               <p>Real Python, compiled to WebAssembly, free and in-browser.</p>
@@ -280,8 +319,8 @@ function App() {
           </section>
         )}
 
-        {tab === 'plan' && (
-          <section>
+        {visitedTabs.has('plan') && (
+          <section hidden={tab !== 'plan'}>
             <div className="panel-head">
               <h2>Build a plan</h2>
               <p>Pick a topic or describe a goal — grounded only in real, cited material. Save it to track in the Path tab.</p>
@@ -292,18 +331,18 @@ function App() {
           </section>
         )}
 
-        {tab === 'learn' && (
-          <section>
+        {visitedTabs.has('learn') && (
+          <section hidden={tab !== 'learn'}>
             <div className="panel-head">
               <h2>Insta</h2>
               <p>Stay current on AI — real papers as cards, tap one, then try it yourself.</p>
             </div>
-            <LearnFeed onNavigate={setTab} uid={user.uid} />
+            <LearnFeed onNavigate={goToTab} uid={user.uid} />
           </section>
         )}
 
-        {tab === 'sandbox' && (
-          <section>
+        {visitedTabs.has('sandbox') && (
+          <section hidden={tab !== 'sandbox'}>
             <div className="panel-head">
               <h2>Live ML Sandbox</h2>
               <p>Train a real image classifier, entirely in your browser, in seconds.</p>

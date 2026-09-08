@@ -33,6 +33,14 @@ service cloud.firestore {
       allow write: if false;
     }
 
+    // feedCache holds getAiFeed's assembled pages (shared across every user,
+    // ~45min TTL enforced in the function itself) — written only by that
+    // Cloud Function, never read or written directly by a client.
+    match /feedCache/{page} {
+      allow read: if false;
+      allow write: if false;
+    }
+
     // Everything else is per-user: a learner (anonymous or upgraded) can
     // only ever read/write their own subtree. Anonymous auth is enabled and
     // trivial to obtain (any visitor gets one on page load), so create/update

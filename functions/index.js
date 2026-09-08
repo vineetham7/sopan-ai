@@ -184,9 +184,26 @@ async function fetchIndustryNews(page) {
   }
 }
 
+const FEED_CACHE_TTL_MS = 45 * 60 * 1000;
+
 exports.getAiFeed = onCall({secrets: [geminiKey]}, async (request) => {
   const offset = Number(request.data?.offset) || 0;
   const page = Math.floor(offset / 6);
+
+  // Every uncached call re-hits arXiv + HF + HN + Gemini live, which is
+  // both slow and pointless when the same page was assembled minutes ago —
+  // this is shared across all users (not per-user), so the first visitor
+  // after the cache expires pays the real fetch, everyone else gets it
+  // instantly until the next TTL window.
+  const db = admin.firestore();
+  const cacheRef = db.collection("feedCache").doc(String(page));
+  const cached = await cacheRef.get();
+  if (cached.exists) {
+    const data = cached.data();
+    if (Date.now() - data.cachedAt < FEED_CACHE_TTL_MS) {
+      return {items: data.items};
+    }
+  }
 
   const [papers, news] = await Promise.all([fetchPapers(page), fetchIndustryNews(page)]);
   const items = [...papers, ...news];
@@ -238,38 +255,39 @@ exports.getAiFeed = onCall({secrets: [geminiKey]}, async (request) => {
     explained = items.map(() => ({}));
   }
 
-  return {
-    items: items.map((it, i) => {
-      const e = explained[i] || {};
-      if (it.kind === "news") {
-        return {
-          kind: "news",
-          source: it.source,
-          title: it.title,
-          url: it.url,
-          discussionUrl: it.discussionUrl,
-          published: it.published,
-          points: it.points,
-          comments: it.comments,
-          whyItMatters: e.whyItMatters || "",
-          significance: e.significance === "breakthrough" ? "breakthrough" : "update",
-        };
-      }
+  const resultItems = items.map((it, i) => {
+    const e = explained[i] || {};
+    if (it.kind === "news") {
       return {
-        kind: "paper",
+        kind: "news",
         source: it.source,
         title: it.title,
         url: it.url,
+        discussionUrl: it.discussionUrl,
         published: it.published,
-        oneLiner: e.oneLiner || "",
-        tryThis: e.tryThis || "",
-        flashQuestion: e.flashQuestion || "",
-        flashAnswer: e.flashAnswer || "",
-        realWorldExample: e.realWorldExample || "",
+        points: it.points,
+        comments: it.comments,
+        whyItMatters: e.whyItMatters || "",
         significance: e.significance === "breakthrough" ? "breakthrough" : "update",
       };
-    }),
-  };
+    }
+    return {
+      kind: "paper",
+      source: it.source,
+      title: it.title,
+      url: it.url,
+      published: it.published,
+      oneLiner: e.oneLiner || "",
+      tryThis: e.tryThis || "",
+      flashQuestion: e.flashQuestion || "",
+      flashAnswer: e.flashAnswer || "",
+      realWorldExample: e.realWorldExample || "",
+      significance: e.significance === "breakthrough" ? "breakthrough" : "update",
+    };
+  });
+
+  await cacheRef.set({items: resultItems, cachedAt: Date.now()});
+  return {items: resultItems};
 });
 
 // LLM-generated dynamic questions — the "modern alternative" to a fixed
