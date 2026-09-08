@@ -75,19 +75,25 @@ export default function Home({ onNavigate }) {
       variants={container}
     >
       <motion.section className="home-hero" variants={rise}>
-        <motion.div
-          className="home-hero-orb"
-          aria-hidden="true"
-          animate={{ scale: [1, 1.08, 1], opacity: [0.5, 0.75, 0.5] }}
-          transition={{ duration: 7, repeat: Infinity, ease: "easeInOut" }}
-        />
+        {/* Positioning lives on this plain wrapper, not the motion.div below —
+            framer-motion's `animate` takes over the `transform` CSS property
+            entirely once it manages any transform-adjacent value (scale here),
+            silently replacing translateX(-50%) and breaking centering. */}
+        <div className="home-hero-orb-wrap" aria-hidden="true">
+          <motion.div
+            className="home-hero-orb"
+            animate={{ scale: [1, 1.08, 1], opacity: [0.5, 0.75, 0.5] }}
+            transition={{ duration: 7, repeat: Infinity, ease: "easeInOut" }}
+          />
+        </div>
         <div className="home-hero-mark"><Logo size={40} /></div>
         <span className="home-hero-eyebrow">Built for Patchamomma 2026</span>
-        <h1 className="home-hero-title">No fake progress bars.</h1>
+        <h1 className="home-hero-title">Learn what&apos;s next, not what&apos;s fixed.</h1>
         <p className="home-hero-sub">
-          A real diagnostic, a curriculum built from real material, and a sandbox where you
-          actually train a model — free, for anyone, no gatekeeping.
+          A real diagnostic, a curriculum grounded in real material, and a live sandbox
+          to actually train a model — free, and built to be usable by anyone.
         </p>
+        <p className="home-hero-motto">Learn. Test. Build. Repeat.</p>
         <button className="home-cta" onClick={() => onNavigate("diagnostic")}>
           Take the diagnostic test →
         </button>

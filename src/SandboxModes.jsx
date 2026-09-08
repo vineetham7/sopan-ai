@@ -78,7 +78,7 @@ export default function SandboxModes() {
               onClick={() => m.ready && setActiveId(m.id)}
               disabled={!m.ready}
             >
-              <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+              <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
                 {m.icon}
               </svg>
               <span className="sandbox-rail-name">{m.name}</span>

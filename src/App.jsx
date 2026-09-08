@@ -160,7 +160,10 @@ function App() {
           <div className="brand-row">
             <button className="brand-logo-btn" onClick={() => goToTab('home')} aria-label="Go to home">
               <Logo size={30} />
-              <h1>Sopan AI</h1>
+              <span className="brand-text">
+                <h1>Sopan AI</h1>
+                <span className="brand-byline">Learn. Test. Build. Repeat.</span>
+              </span>
             </button>
             <nav className="site-nav">
               {TABS.map((t) => (

@@ -152,7 +152,7 @@
 }
 
 .tracked-plan-body .step-source {
-  font-size: 10.5px;
+  font-size: 12px;
   color: var(--accent-ink);
   word-break: break-all;
 }
