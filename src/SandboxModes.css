@@ -19,6 +19,55 @@
   }
 }
 
+.sandbox-intro {
+  margin-bottom: 18px;
+  background: linear-gradient(155deg, var(--accent-tint), var(--paper-raised) 60%);
+  border-color: var(--accent);
+}
+
+.sandbox-intro-eyebrow {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--accent);
+  margin: 0 0 6px;
+}
+
+.sandbox-intro h3 {
+  font-size: clamp(19px, 1vw + 15px, 24px);
+  margin-bottom: 10px;
+}
+
+.sandbox-intro p {
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--ink);
+  margin: 0 0 10px;
+}
+
+.sandbox-intro p:last-of-type {
+  margin-bottom: 14px;
+}
+
+.sandbox-intro-cta {
+  font-weight: 600;
+}
+
+.sandbox-intro-dismiss {
+  background: none;
+  border: none;
+  color: var(--accent);
+  font-weight: 600;
+  font-size: 13.5px;
+  cursor: pointer;
+  padding: 0;
+}
+
+.sandbox-intro-dismiss:hover {
+  text-decoration: underline;
+}
+
 .sandbox-mode-head {
   margin-bottom: 14px;
 }

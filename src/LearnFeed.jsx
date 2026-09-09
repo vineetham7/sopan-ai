@@ -194,6 +194,10 @@ export default function LearnFeed({ onNavigate, uid }) {
           <>
             <p className="one-liner">{openItem.whyItMatters}</p>
             <p className="hn-stats">{openItem.points} points · {openItem.comments} comments on Hacker News</p>
+            <p className="beginner-note">
+              Everything you need is already above — the links below go to the original article and a
+              comment thread that can get pretty technical. Skip them if plain-language is all you wanted.
+            </p>
             <a className="read-original" href={openItem.url} target="_blank" rel="noreferrer">Read the original article →</a>
             <a className="read-original" href={openItem.discussionUrl} target="_blank" rel="noreferrer">See the Hacker News discussion →</a>
           </>
@@ -207,10 +211,20 @@ export default function LearnFeed({ onNavigate, uid }) {
               <div className="try-this"><span className="label">Try this —</span>{openItem.tryThis}</div>
             )}
             <FlashCard question={openItem.flashQuestion} answer={openItem.flashAnswer} />
+            <p className="beginner-note">
+              Never written a line of Python? The summary above already covers what this paper means in
+              plain English — the link below is the actual academic paper, dense and technical by design.
+              Only click through if you want the full detail.
+            </p>
             <a className="read-original" href={openItem.url} target="_blank" rel="noreferrer">Read the original paper →</a>
             <button className="btn btn-primary btn-block try-now" onClick={() => onNavigate?.(routeForArticle(openItem))}>
               Try it now →
             </button>
+            <p className="try-now-caption">
+              {routeForArticle(openItem) === "sandbox"
+                ? "No coding involved — you'll train a real model just by clicking."
+                : "Includes runnable Python — just press Run, no need to write anything yourself."}
+            </p>
           </>
         )}
 
