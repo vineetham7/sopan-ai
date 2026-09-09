@@ -252,13 +252,13 @@ exports.getAiFeed = onCall({secrets: [geminiKey]}, async (request) => {
   if (cached.exists) {
     const data = cached.data();
     if (Date.now() - data.cachedAt < FEED_CACHE_TTL_MS) {
-      return {items: data.items};
+      return {items: data.items, cachedAt: data.cachedAt};
     }
   }
 
   const [papers, news] = await Promise.all([fetchPapers(page), fetchIndustryNews(page)]);
   const items = [...papers, ...news];
-  if (items.length === 0) return {items: []};
+  if (items.length === 0) return {items: [], cachedAt: Date.now()};
 
   // Gemini explains each — papers get the full pedagogical treatment
   // (grounded strictly in the real abstract); news items get only a
@@ -337,8 +337,9 @@ exports.getAiFeed = onCall({secrets: [geminiKey]}, async (request) => {
     };
   });
 
-  await cacheRef.set({items: resultItems, cachedAt: Date.now()});
-  return {items: resultItems};
+  const cachedAt = Date.now();
+  await cacheRef.set({items: resultItems, cachedAt});
+  return {items: resultItems, cachedAt};
 });
 
 // LLM-generated dynamic questions — the "modern alternative" to a fixed

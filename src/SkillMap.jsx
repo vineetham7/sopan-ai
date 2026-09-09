@@ -14,6 +14,7 @@ const SELF_ASSESSMENTS = [
 
 export default function SkillMap({ uid, nodes }) {
   const [checkingNodeId, setCheckingNodeId] = useState(null);
+  const titleById = Object.fromEntries(nodes.map((n) => [n.id, n.title]));
 
   async function setSelfAssessment(node, assessment) {
     const next = node.selfAssessment === assessment ? null : assessment; // tap again to clear
@@ -35,6 +36,12 @@ export default function SkillMap({ uid, nodes }) {
             <span className="skill-title">{n.title}</span>
             {isDue(n) && <span className="due-badge">Due for review</span>}
           </div>
+
+          {n.status === "locked" && n.prerequisites?.length > 0 && (
+            <p className="skill-locked-reason">
+              Unlocks after mastering {n.prerequisites.map((id) => titleById[id] || id).join(", ")}
+            </p>
+          )}
 
           {n.status !== "locked" && checkingNodeId !== n.id && (
             <>

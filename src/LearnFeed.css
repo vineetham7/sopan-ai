@@ -55,8 +55,17 @@
 /* Filter tabs — All / Research / Industry news */
 .feed-filters {
   display: flex;
+  align-items: center;
   gap: 4px;
   margin-bottom: 12px;
+  flex-wrap: wrap;
+}
+
+.feed-freshness {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 11px;
+  color: var(--ink-soft);
+  margin-left: auto;
 }
 
 .feed-filters button {

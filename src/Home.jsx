@@ -20,6 +20,13 @@ const CARDS = [
     body: "A real placement test, not a survey — answer honestly and it skips you straight to what you actually don't know yet.",
   },
   {
+    tab: "Sandbox",
+    tabId: "sandbox",
+    icon: ICONS.sandbox,
+    highlight: "Train a real model in seconds",
+    body: "Ever wondered how AI actually tells things apart? Train one yourself, live, and watch the real math behind each guess.",
+  },
+  {
     tab: "Path",
     tabId: "path",
     icon: ICONS.path,
@@ -44,15 +51,8 @@ const CARDS = [
     tab: "Insta",
     tabId: "learn",
     icon: ICONS.learn,
-    highlight: "arXiv · HF · Hacker News",
-    body: "Real papers and real industry news, filtered down to what's actually worth ten minutes of your attention.",
-  },
-  {
-    tab: "Sandbox",
-    tabId: "sandbox",
-    icon: ICONS.sandbox,
-    highlight: "Train a model in seconds",
-    body: "Upload your own photos, train a real image classifier, and watch the literal math behind each prediction.",
+    highlight: "No coding needed to follow it",
+    body: "Real papers and real industry news, each explained in plain language first — the code is there if you want it, not if you don't.",
   },
 ]
 
@@ -65,7 +65,7 @@ const rise = {
   show: { opacity: 1, y: 0, transition: { duration: 0.5, ease: [0.2, 0.7, 0.3, 1] } },
 }
 
-export default function Home({ onNavigate }) {
+export default function Home({ onNavigate, dueCount = 0 }) {
   return (
     <MotionConfig reducedMotion="user">
     <motion.div
@@ -111,7 +111,12 @@ export default function Home({ onNavigate }) {
             <svg className="home-card-icon" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
               {c.icon}
             </svg>
-            <span className="home-card-tab">{c.tab}</span>
+            <span className="home-card-tab">
+              {c.tab}
+              {c.tabId === "path" && dueCount > 0 && (
+                <span className="home-card-badge">{dueCount} due</span>
+              )}
+            </span>
             <span className="home-card-highlight">{c.highlight}</span>
             <span className="home-card-intro">{c.body}</span>
             <span className="home-card-go">Open →</span>

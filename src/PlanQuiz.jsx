@@ -1,4 +1,5 @@
 import { useMemo, useState } from "react";
+import MathText from "./MathText";
 import "./PlanQuiz.css";
 
 // Gemini reliably lists the correct option first — confirmed across live
@@ -71,7 +72,7 @@ export default function PlanQuiz({ questions, onComplete, onAskTutor }) {
         ))}
       </div>
       <p className="quiz-meta">Question {index + 1} of {questions.length}</p>
-      <p className="quiz-prompt">{current.prompt}</p>
+      <p className="quiz-prompt"><MathText text={current.prompt} /></p>
       <ul className="quiz-options">
         {shuffledOptions.map((opt, i) => {
           const isSelected = selected === opt;
@@ -83,14 +84,18 @@ export default function PlanQuiz({ questions, onComplete, onAskTutor }) {
           }
           return (
             <li key={i}>
-              <button className={cls} onClick={() => selectAnswer(opt)} disabled={!!selected}>{opt}</button>
+              <button className={cls} onClick={() => selectAnswer(opt)} disabled={!!selected}><MathText text={opt} /></button>
             </li>
           );
         })}
       </ul>
       {selected && (
         <div className="quiz-feedback">
-          <p className="quiz-verdict">{selected === current.answer ? "Correct." : `Not quite — correct answer: ${current.answer}.`}</p>
+          <p className="quiz-verdict">
+            {selected === current.answer
+              ? "Correct."
+              : <>Not quite — correct answer: <MathText text={current.answer} />.</>}
+          </p>
           {current.explanation && <p className="quiz-explanation">{current.explanation}</p>}
           {selected !== current.answer && onAskTutor && (
             <button

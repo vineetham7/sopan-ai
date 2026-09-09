@@ -4,6 +4,7 @@ import { db } from "./firebase";
 import { questions as authoredQuestions } from "./diagnosticQuestions";
 import { TOPICS } from "./topics";
 import AnswerExplanation from "./AnswerExplanation";
+import MathText from "./MathText";
 import "./DiagnosticQuiz.css";
 
 const QUESTIONS_PER_TOPIC = 4;
@@ -175,7 +176,7 @@ export default function Diagnostic({ onComplete }) {
           ))}
         </div>
       </div>
-      <p className="prompt">{current.prompt}</p>
+      <p className="prompt"><MathText text={current.prompt} /></p>
       <ul className="options">
         {current.options.map((opt, i) => {
           const isSelected = selected === opt;
@@ -188,7 +189,7 @@ export default function Diagnostic({ onComplete }) {
           return (
             <li key={i}>
               <button className={cls} onClick={() => selectAnswer(opt)} disabled={!!selected}>
-                {opt}
+                <MathText text={opt} />
               </button>
             </li>
           );
@@ -196,7 +197,11 @@ export default function Diagnostic({ onComplete }) {
       </ul>
       {selected && (
         <div className="feedback">
-          <p className="verdict">{selected === current.answer ? "Correct." : `Not quite — correct answer: ${current.answer}.`}</p>
+          <p className="verdict">
+            {selected === current.answer
+              ? "Correct."
+              : <>Not quite — correct answer: <MathText text={current.answer} />.</>}
+          </p>
           <AnswerExplanation
             prompt={current.prompt}
             options={current.options}

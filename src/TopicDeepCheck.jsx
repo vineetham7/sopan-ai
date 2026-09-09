@@ -5,6 +5,7 @@ import { questions } from "./diagnosticQuestions";
 import { TOPICS } from "./topics";
 import { applyDeepCheckResult } from "./applyDeepCheckResult";
 import AnswerExplanation from "./AnswerExplanation";
+import MathText from "./MathText";
 import "./TopicDeepCheck.css";
 
 const QUESTIONS_PER_CHECK = 10;
@@ -128,7 +129,7 @@ export default function TopicDeepCheck({ uid, node, onClose }) {
           ))}
         </div>
       </div>
-      <p className="prompt">{current.prompt}</p>
+      <p className="prompt"><MathText text={current.prompt} /></p>
       <ul className="options">
         {current.options.map((opt, i) => {
           const isSelected = selected === opt;
@@ -141,7 +142,7 @@ export default function TopicDeepCheck({ uid, node, onClose }) {
           return (
             <li key={i}>
               <button className={cls} onClick={() => selectAnswer(opt)} disabled={!!selected}>
-                {opt}
+                <MathText text={opt} />
               </button>
             </li>
           );
@@ -149,7 +150,11 @@ export default function TopicDeepCheck({ uid, node, onClose }) {
       </ul>
       {selected && (
         <div className="feedback">
-          <p className="verdict">{selected === current.answer ? "Correct." : `Not quite — correct answer: ${current.answer}.`}</p>
+          <p className="verdict">
+            {selected === current.answer
+              ? "Correct."
+              : <>Not quite — correct answer: <MathText text={current.answer} />.</>}
+          </p>
           <AnswerExplanation
             prompt={current.prompt}
             options={current.options}

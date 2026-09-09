@@ -7,6 +7,20 @@ import "./LearnFeed.css";
 
 const getAiFeed = httpsCallable(functions, "getAiFeed");
 
+// getAiFeed is cached server-side for 45min and shared across every user —
+// without this, there's no way to tell whether "the same articles" you're
+// seeing on a repeat visit means the cache genuinely hasn't rolled over
+// yet, or something's actually stuck.
+function timeAgo(ms) {
+  if (!ms) return null;
+  const mins = Math.round((Date.now() - ms) / 60000);
+  if (mins < 1) return "just now";
+  if (mins === 1) return "1 minute ago";
+  if (mins < 60) return `${mins} minutes ago`;
+  const hrs = Math.round(mins / 60);
+  return hrs === 1 ? "1 hour ago" : `${hrs} hours ago`;
+}
+
 function FlashCard({ question, answer }) {
   const [flipped, setFlipped] = useState(false);
   if (!question) return null;
@@ -103,6 +117,7 @@ export default function LearnFeed({ onNavigate, uid }) {
   const [bookmarks, setBookmarks] = useState([]);
   const [chatMounted, setChatMounted] = useState({});
   const [chatOpen, setChatOpen] = useState({});
+  const [cachedAt, setCachedAt] = useState(null);
   const loadedOnce = useRef(false);
 
   function openChat(url) {
@@ -134,6 +149,7 @@ export default function LearnFeed({ onNavigate, uid }) {
       const res = await getAiFeed({ offset: nextOffset });
       setItems((prev) => (append ? [...prev, ...res.data.items] : res.data.items));
       setOffset(nextOffset);
+      setCachedAt(res.data.cachedAt ?? null);
       setStatus("done");
     } catch (err) {
       setError(err.message ?? String(err));
@@ -223,6 +239,7 @@ export default function LearnFeed({ onNavigate, uid }) {
           {[["all", "All"], ["paper", "Research"], ["news", "Industry news"], ["bookmarked", `Bookmarked${bookmarks.length ? ` (${bookmarks.length})` : ""}`]].map(([id, label]) => (
             <button key={id} className={filter === id ? "active" : ""} onClick={() => setFilter(id)}>{label}</button>
           ))}
+          {timeAgo(cachedAt) && <span className="feed-freshness">Updated {timeAgo(cachedAt)}</span>}
         </div>
       )}
 

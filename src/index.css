@@ -137,6 +137,13 @@ h1, h2, h3 {
   margin: 0;
 }
 
+.math-text {
+  display: inline-block;
+  max-width: 100%;
+  overflow-x: auto;
+  vertical-align: middle;
+}
+
 .explanation.muted {
   font-style: italic;
   opacity: 0.75;

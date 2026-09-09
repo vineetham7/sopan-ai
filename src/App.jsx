@@ -119,6 +119,7 @@ function App() {
       const id = e.state?.tab || 'home'
       setVisitedTabs((prev) => (prev.has(id) ? prev : new Set(prev).add(id)))
       setTab(id)
+      window.scrollTo(0, 0)
     }
     window.addEventListener('popstate', onPopState)
     return () => window.removeEventListener('popstate', onPopState)
@@ -129,6 +130,11 @@ function App() {
     setVisitedTabs((prev) => (prev.has(id) ? prev : new Set(prev).add(id)))
     if (tab !== id) window.history.pushState({ tab: id }, '', `#${id}`)
     setTab(id)
+    // Every section stays mounted (see visitedTabs above) so switching tabs
+    // never triggers a real navigation the browser would reset scroll for
+    // on its own — without this, landing on a new tab kept whatever scroll
+    // position the previous one was at, which read as landing mid-page.
+    window.scrollTo(0, 0)
   }
 
   const mastered = skillNodes.filter((n) => n.status === 'mastered').length
@@ -273,7 +279,7 @@ function App() {
             open article, Sandbox training, an open tutor chat. */}
         {visitedTabs.has('home') && (
           <section hidden={tab !== 'home'}>
-            <Home onNavigate={goToTab} />
+            <Home onNavigate={goToTab} dueCount={dueNodes.length} />
           </section>
         )}
 
