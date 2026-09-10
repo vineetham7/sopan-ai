@@ -238,7 +238,6 @@ function App() {
           </div>
 
           <div className="header-sub-row">
-            <p className="tagline">Learn what's next, not what's fixed</p>
             {isAnonymous ? (
               <button className="save-progress" onClick={upgradeWithGoogle}>
                 <svg viewBox="0 0 18 18" width="15" height="15" aria-hidden="true">

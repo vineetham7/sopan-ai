@@ -17,7 +17,7 @@ const CARDS = [
     tabId: "diagnostic",
     icon: ICONS.diagnostic,
     highlight: "32 real questions · 8 topics",
-    body: "A real placement test, not a survey — answer honestly and it skips you straight to what you actually don't know yet.",
+    body: "Skip the guesswork — a real placement test that adapts to your answers and shows exactly where to start.",
   },
   {
     tab: "Sandbox",
@@ -38,20 +38,20 @@ const CARDS = [
     tabId: "practice",
     icon: ICONS.practice,
     highlight: "A real Python interpreter",
-    body: "Write code and actually run it in your browser, or fix five real bugs and prove the fix works — no fake output.",
+    body: "Write code and actually run it in your browser, or fix real bugs and test if the fix works — live!",
   },
   {
     tab: "Plan",
     tabId: "plan",
     icon: ICONS.plan,
-    highlight: "Cited, not invented",
+    highlight: "Grounded, not guessed",
     body: "Describe a goal and get a study plan grounded in real material — flashcards, a quiz, and an AI tutor on every step.",
   },
   {
     tab: "Insta",
     tabId: "learn",
     icon: ICONS.learn,
-    highlight: "No coding needed to follow it",
+    highlight: "Dive into today's AI world",
     body: "Real papers and real industry news, each explained in plain language first — the code is there if you want it, not if you don't.",
   },
 ]
@@ -88,10 +88,10 @@ export default function Home({ onNavigate, dueCount = 0 }) {
         </div>
         <div className="home-hero-mark"><Logo size={40} /></div>
         <span className="home-hero-eyebrow">Built for Patchamomma 2026</span>
-        <h1 className="home-hero-title">Learn what&apos;s next, not what&apos;s fixed.</h1>
+        <h1 className="home-hero-title">Your Gateway to AI&nbsp;&amp; Machine Learning</h1>
         <p className="home-hero-sub">
-          A real diagnostic, a curriculum grounded in real material, and a live sandbox
-          to actually train a model — free, and built to be usable by anyone.
+          Test what you actually know, learn exactly what's next, and train a real model
+          along the way — free, and built to be usable by anyone.
         </p>
         <p className="home-hero-motto">Learn. Test. Build. Repeat.</p>
         <button className="home-cta" onClick={() => onNavigate("diagnostic")}>

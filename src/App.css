@@ -110,15 +110,9 @@
 .header-sub-row {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-end;
   flex-wrap: wrap;
   gap: 12px;
-}
-
-.tagline {
-  font-size: 14px;
-  color: var(--ink-soft);
-  margin: 0;
 }
 
 .auth-loading {
